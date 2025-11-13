@@ -1,65 +1,136 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { motion } from "motion/react";
+import { ArrowRight, Sparkles } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { useTheme } from "next-themes";
+import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+import { Button } from "@/components/ui/button";
+
+// Buttons now visually wider using w-[14rem] and internal centering
+
+export default function HeroSectionOne() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className="relative mx-auto my-10 flex max-w-7xl flex-col items-center justify-center bg-background text-foreground transition-colors">
+      <Navbar />
+
+      {/* Decorative Borders */}
+      <div className="absolute inset-y-0 left-0 h-full w-px bg-border" />
+      <div className="absolute inset-y-0 right-0 h-full w-px bg-border" />
+      <div className="absolute inset-x-0 bottom-0 h-px w-full bg-border" />
+
+      {/* CONTENT */}
+      <div className="px-4 py-10 md:py-20 ">
+        <BackgroundRippleEffect />
+
+        <h1 className="relative z-10 mx-auto max-w-3xl text-center text-2xl font-bold md:text-4xl lg:text-5xl text-foreground">
+          {"Grid — Focus. Learn. Achieve.".split(" ").map((word, index) => (
+            <motion.span
+              key={index}
+              initial={{ opacity: 0, filter: "blur(6px)", y: 10 }}
+              animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.08, ease: "easeInOut" }}
+              className="mr-2 inline-block">
+              {word}
+            </motion.span>
+          ))}
+        </h1>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 1 }}
+          className="relative z-10 mx-auto max-w-xl py-4 text-center text-base md:text-lg text-muted-foreground">
+          Your student hub for notes, tasks and reminders.
+        </motion.p>
+
+        {/* CTA BUTTONS */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 1.2 }}
+          className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4">
+          {/* Primary Button */}
+          <Button
+            asChild
+            variant="default"
+            className="w-[14rem] min-h-[52px] px-10 py-3 rounded-lg bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-3 group leading-none
+            transition-all duration-300 border border-primary shadow-sm hover:bg-primary/80">
+            <Link href="/sign-up" className="flex items-center gap-3">
+              Get Started
+              <ArrowRight className="w-5 h-5 transform transition-transform duration-300 group-hover:translate-x-[4px]" />
+            </Link>
+          </Button>
+
+          {/* Secondary Button */}
+          <Button
+            asChild
+            variant="outline"
+            className="w-[14rem] min-h-[52px] px-10 py-3 rounded-lg border border-foreground/20 text-foreground font-semibold flex items-center justify-center gap-3 group leading-none backdrop-blur-sm
+            transition-all duration-300 hover:bg-foreground/10">
+            <Link href="#explore" className="flex items-center gap-3">
+              Explore
+              <Sparkles className="w-5 h-5 transform transition-transform duration-300 group-hover:translate-x-[4px]" />
+            </Link>
+          </Button>
+        </motion.div>
+
+        {/* PRODUCT MOCKUP */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 1.4 }}
+          className="relative z-10 mt-20 rounded-3xl border border-border bg-card p-4 shadow-md transition-colors">
+          <div className=" max-w-6xl w-full overflow-hidden rounded-xl border border-border">
+            <img
+              src="https://assets.aceternity.com/pro/aceternity-landing.webp"
+              alt="Grid preview"
+              className="aspect-[16/9] h-full w-full object-cover"
+              width={1000}
+              height={1000}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }
+
+const Navbar = () => {
+  const { resolvedTheme } = useTheme();
+
+  const src =
+    resolvedTheme === "light"
+      ? "/logo/logo-light.svg"
+      : resolvedTheme === "dark"
+      ? "/logo/logo-dark.svg"
+      : "/logo/logo-dark.svg";
+
+  return (
+    <nav className="z-[99] flex w-full items-center justify-between border-t border-border px-4 py-4 bg-background/10 backdrop-blur-[10px] text-foreground transition-colors">
+      <div className="flex items-center gap-3">
+        <Image src={src} alt="Grid Logo" width={28} height={28} className="object-contain" />
+        <h1 className="text-base font-bold md:text-xl">Grid</h1>
+      </div>
+
+      <div className="hidden md:flex items-center gap-6 text-sm font-medium">
+        <Link href="#features" className="hover:text-muted-foreground transition">
+          Features
+        </Link>
+        <Link href="#pricing" className="hover:text-muted-foreground transition">
+          Pricing
+        </Link>
+        <Link href="#faqs" className="hover:text-muted-foreground transition">
+          FAQs
+        </Link>
+      </div>
+
+      <Button
+        asChild
+        className="min-h-[40px] px-6 py-2 rounded-md bg-primary text-primary-foreground font-medium transition-all hover:bg-primary/80">
+        <Link href="/log-in">Login</Link>
+      </Button>
+    </nav>
+  );
+};
