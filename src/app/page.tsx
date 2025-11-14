@@ -27,7 +27,7 @@ export default function LandingPlaceholder() {
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="absolute left-4 top-4 z-50">
- <AnimatedThemeToggler className="h-10 w-10 flex items-center justify-center rounded-lg bg-background/40 border border-border/40 backdrop-blur-md hover:bg-background/70 transition shadow-sm" />
+        <AnimatedThemeToggler className="h-10 w-10 flex items-center justify-center rounded-lg bg-background/40 border border-border/40 backdrop-blur-md hover:bg-background/70 transition shadow-sm" />
       </motion.div>
 
       {/* ======= TOP RIGHT: DIALOG TRIGGER (enter first) ======= */}
@@ -133,7 +133,7 @@ export default function LandingPlaceholder() {
             transition-colors
             flex items-center gap-2
           ">
-          <Link href="/sign-up">
+          <Link href="/signup">
             Get Started
             <ArrowRight className="w-5 h-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />
           </Link>
@@ -156,7 +156,7 @@ export default function LandingPlaceholder() {
             transition-colors
             flex items-center gap-2
           ">
-          <Link href="/log-in">
+          <Link href="/login">
             Log In
             <ArrowRight className="w-5 h-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />
           </Link>
