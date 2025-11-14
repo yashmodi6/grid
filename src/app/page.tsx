@@ -1,136 +1,167 @@
 "use client";
 
 import { motion } from "motion/react";
-import { ArrowRight, Sparkles } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import { useTheme } from "next-themes";
-import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
-// Buttons now visually wider using w-[14rem] and internal centering
+import { ArrowRight } from "lucide-react";
+import { AnimatedThemeToggler } from "@/components/ThemeToggler";
 
-export default function HeroSectionOne() {
+export default function LandingPlaceholder() {
   return (
-    <div className="relative mx-auto my-10 flex max-w-7xl flex-col items-center justify-center bg-background text-foreground transition-colors">
-      <Navbar />
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background text-foreground px-4 overflow-hidden">
+      {/* Grain */}
+      <div className="pointer-events-none absolute inset-0 z-[1] opacity-[0.12] mix-blend-overlay bg-[url('/grain.png')] bg-repeat" />
 
-      {/* Decorative Borders */}
-      <div className="absolute inset-y-0 left-0 h-full w-px bg-border" />
-      <div className="absolute inset-y-0 right-0 h-full w-px bg-border" />
-      <div className="absolute inset-x-0 bottom-0 h-px w-full bg-border" />
+      {/* ======= TOP LEFT: THEME TOGGLER (enter first) ======= */}
+      <motion.div
+        initial={{ opacity: 0, y: -8, filter: "blur(6px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="absolute left-4 top-4 z-50">
+ <AnimatedThemeToggler className="h-10 w-10 flex items-center justify-center rounded-lg bg-background/40 border border-border/40 backdrop-blur-md hover:bg-background/70 transition shadow-sm" />
+      </motion.div>
 
-      {/* CONTENT */}
-      <div className="px-4 py-10 md:py-20 ">
-        <BackgroundRippleEffect />
+      {/* ======= TOP RIGHT: DIALOG TRIGGER (enter first) ======= */}
+      <motion.div
+        initial={{ opacity: 0, y: -8, filter: "blur(6px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+        className="absolute right-4 top-4 z-50">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              className="text-xs md:text-sm px-3 py-1.5 rounded-xl bg-background/40 backdrop-blur-xl border border-border/50 shadow-md hover:bg-background/60 transition">
+              why no landing? 😭
+            </Button>
+          </DialogTrigger>
 
-        <h1 className="relative z-10 mx-auto max-w-3xl text-center text-2xl font-bold md:text-4xl lg:text-5xl text-foreground">
-          {"Grid — Focus. Learn. Achieve.".split(" ").map((word, index) => (
-            <motion.span
-              key={index}
-              initial={{ opacity: 0, filter: "blur(6px)", y: 10 }}
-              animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.08, ease: "easeInOut" }}
-              className="mr-2 inline-block">
-              {word}
-            </motion.span>
-          ))}
-        </h1>
+          <DialogContent className="max-w-sm rounded-2xl backdrop-blur-xl bg-background/80 border border-border/50">
+            <DialogHeader>
+              <DialogTitle className="text-lg font-semibold">The dramatic truth 😭🔥</DialogTitle>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 1 }}
-          className="relative z-10 mx-auto max-w-xl py-4 text-center text-base md:text-lg text-muted-foreground">
-          Your student hub for notes, tasks and reminders.
-        </motion.p>
+              <DialogDescription asChild>
+                <div className="pt-2 text-sm leading-6 opacity-90 space-y-4">
+                  <div>Bro… I haven’t even built the product yet 😭</div>
 
-        {/* CTA BUTTONS */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 1.2 }}
-          className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4">
-          {/* Primary Button */}
-          <Button
-            asChild
-            variant="default"
-            className="w-[14rem] min-h-[52px] px-10 py-3 rounded-lg bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-3 group leading-none
-            transition-all duration-300 border border-primary shadow-sm hover:bg-primary/80">
-            <Link href="/sign-up" className="flex items-center gap-3">
-              Get Started
-              <ArrowRight className="w-5 h-5 transform transition-transform duration-300 group-hover:translate-x-[4px]" />
-            </Link>
-          </Button>
+                  <div>
+                    Making some fancy ✨ scammy SaaS landing page ✨ with gradients, blobs,
+                    testimonials from “CEOs”, and fake dashboards felt…
+                    <span className="font-medium"> ILLEGAL 💀</span>
+                  </div>
 
-          {/* Secondary Button */}
-          <Button
-            asChild
-            variant="outline"
-            className="w-[14rem] min-h-[52px] px-10 py-3 rounded-lg border border-foreground/20 text-foreground font-semibold flex items-center justify-center gap-3 group leading-none backdrop-blur-sm
-            transition-all duration-300 hover:bg-foreground/10">
-            <Link href="#explore" className="flex items-center gap-3">
-              Explore
-              <Sparkles className="w-5 h-5 transform transition-transform duration-300 group-hover:translate-x-[4px]" />
-            </Link>
-          </Button>
-        </motion.div>
+                  <div>
+                    So instead of pretending Grid is a billion-dollar company with “10k happy users
+                    😍”, I decided to be
+                    <span className="font-medium"> honest & delulu-free 🤝</span>
+                  </div>
 
-        {/* PRODUCT MOCKUP */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 1.4 }}
-          className="relative z-10 mt-20 rounded-3xl border border-border bg-card p-4 shadow-md transition-colors">
-          <div className=" max-w-6xl w-full overflow-hidden rounded-xl border border-border">
-            <img
-              src="https://assets.aceternity.com/pro/aceternity-landing.webp"
-              alt="Grid preview"
-              className="aspect-[16/9] h-full w-full object-cover"
-              width={1000}
-              height={1000}
-            />
-          </div>
-        </motion.div>
-      </div>
+                  <div>
+                    Real landing page will come when Grid actually exists 🙏🔥 For now? vibes only.
+                  </div>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </motion.div>
+
+      {/* Background glows (same as before) */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.7 }}
+        animate={{ opacity: 0.25, scale: 1 }}
+        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute w-[650px] h-[650px] rounded-full bg-primary/30 blur-[150px]"
+      />
+      <motion.div
+        initial={{ x: -20, y: -20, opacity: 0.1 }}
+        animate={{ x: [-10, 10, -10], y: [0, 20, 0], opacity: 0.2 }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-32 left-10 h-48 w-48 rounded-full bg-primary/10 blur-[100px]"
+      />
+      <motion.div
+        initial={{ x: 20, opacity: 0.1 }}
+        animate={{ x: [10, -10, 10], opacity: 0.2 }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-32 right-10 h-52 w-52 rounded-full bg-primary/10 blur-[100px]"
+      />
+
+      {/* ======= HERO TITLE (enter second) ======= */}
+      <motion.h1
+        initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="relative z-10 text-center text-4xl md:text-5xl font-bold bg-gradient-to-br from-foreground to-foreground/60 bg-clip-text text-transparent">
+        Grid is coming soon.
+      </motion.h1>
+
+      {/* ======= HERO SUBTEXT (enter second) ======= */}
+      <motion.p
+        initial={{ opacity: 0, filter: "blur(6px)", y: 8 }}
+        animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+        transition={{ delay: 0.35, duration: 0.6 }}
+        className="relative z-10 mt-4 max-w-md text-center text-muted-foreground text-base md:text-lg">
+        Where clarity meets productivity.
+      </motion.p>
+
+      {/* ======= CTA BUTTONS (enter last) ======= */}
+      <motion.div
+        initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ delay: 0.55, duration: 0.6 }}
+        className="relative z-10 mt-10 flex flex-col sm:flex-row gap-4">
+        {/* PRIMARY */}
+        <Button
+          asChild
+          className="
+            group
+            px-10 
+            py-5 
+            shadow-sm 
+            bg-primary
+            text-primary-foreground
+            hover:bg-primary/90
+            transition-colors
+            flex items-center gap-2
+          ">
+          <Link href="/sign-up">
+            Get Started
+            <ArrowRight className="w-5 h-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />
+          </Link>
+        </Button>
+
+        {/* SECONDARY */}
+        <Button
+          asChild
+          variant="outline"
+          className="
+            group
+            px-10 
+            py-5 
+            text-base 
+            shadow-sm 
+            bg-background/40
+            border border-border/60
+            backdrop-blur-md
+            hover:bg-background/60
+            transition-colors
+            flex items-center gap-2
+          ">
+          <Link href="/log-in">
+            Log In
+            <ArrowRight className="w-5 h-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />
+          </Link>
+        </Button>
+      </motion.div>
     </div>
   );
 }
-
-const Navbar = () => {
-  const { resolvedTheme } = useTheme();
-
-  const src =
-    resolvedTheme === "light"
-      ? "/logo/logo-light.svg"
-      : resolvedTheme === "dark"
-      ? "/logo/logo-dark.svg"
-      : "/logo/logo-dark.svg";
-
-  return (
-    <nav className="z-[99] flex w-full items-center justify-between border-t border-border px-4 py-4 bg-background/10 backdrop-blur-[10px] text-foreground transition-colors">
-      <div className="flex items-center gap-3">
-        <Image src={src} alt="Grid Logo" width={28} height={28} className="object-contain" />
-        <h1 className="text-base font-bold md:text-xl">Grid</h1>
-      </div>
-
-      <div className="hidden md:flex items-center gap-6 text-sm font-medium">
-        <Link href="#features" className="hover:text-muted-foreground transition">
-          Features
-        </Link>
-        <Link href="#pricing" className="hover:text-muted-foreground transition">
-          Pricing
-        </Link>
-        <Link href="#faqs" className="hover:text-muted-foreground transition">
-          FAQs
-        </Link>
-      </div>
-
-      <Button
-        asChild
-        className="min-h-[40px] px-6 py-2 rounded-md bg-primary text-primary-foreground font-medium transition-all hover:bg-primary/80">
-        <Link href="/log-in">Login</Link>
-      </Button>
-    </nav>
-  );
-};
