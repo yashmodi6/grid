@@ -17,17 +17,17 @@ import { AnimatedThemeToggler } from "@/components/ThemeToggler";
 
 export default function LandingPlaceholder() {
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background text-foreground px-4 overflow-hidden">
+    <div className="bg-background text-foreground relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4">
       {/* Grain */}
-      <div className="pointer-events-none absolute inset-0 z-[1] opacity-[0.12] mix-blend-overlay bg-[url('/grain.png')] bg-repeat" />
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-[url('/grain.png')] bg-repeat opacity-[0.12] mix-blend-overlay" />
 
       {/* ======= TOP LEFT: THEME TOGGLER (enter first) ======= */}
       <motion.div
         initial={{ opacity: 0, y: -8, filter: "blur(6px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="absolute left-4 top-4 z-50">
-        <AnimatedThemeToggler className="h-10 w-10 flex items-center justify-center rounded-lg bg-background/40 border border-border/40 backdrop-blur-md hover:bg-background/70 transition shadow-sm" />
+        className="absolute top-4 left-4 z-50">
+        <AnimatedThemeToggler className="bg-background/40 border-border/40 hover:bg-background/70 flex h-10 w-10 items-center justify-center rounded-lg border shadow-sm backdrop-blur-md transition" />
       </motion.div>
 
       {/* ======= TOP RIGHT: DIALOG TRIGGER (enter first) ======= */}
@@ -35,22 +35,22 @@ export default function LandingPlaceholder() {
         initial={{ opacity: 0, y: -8, filter: "blur(6px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-        className="absolute right-4 top-4 z-50">
+        className="absolute top-4 right-4 z-50">
         <Dialog>
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              className="text-xs md:text-sm px-3 py-1.5 rounded-xl bg-background/40 backdrop-blur-xl border border-border/50 shadow-md hover:bg-background/60 transition">
+              className="bg-background/40 border-border/50 hover:bg-background/60 rounded-xl border px-3 py-1.5 text-xs shadow-md backdrop-blur-xl transition md:text-sm">
               why no landing? 😭
             </Button>
           </DialogTrigger>
 
-          <DialogContent className="max-w-sm rounded-2xl backdrop-blur-xl bg-background/80 border border-border/50">
+          <DialogContent className="bg-background/80 border-border/50 max-w-sm rounded-2xl border backdrop-blur-xl">
             <DialogHeader>
               <DialogTitle className="text-lg font-semibold">The dramatic truth 😭🔥</DialogTitle>
 
               <DialogDescription asChild>
-                <div className="pt-2 text-sm leading-6 opacity-90 space-y-4">
+                <div className="space-y-4 pt-2 text-sm leading-6 opacity-90">
                   <div>Bro… I haven’t even built the product yet 😭</div>
 
                   <div>
@@ -80,19 +80,19 @@ export default function LandingPlaceholder() {
         initial={{ opacity: 0, scale: 0.7 }}
         animate={{ opacity: 0.25, scale: 1 }}
         transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute w-[650px] h-[650px] rounded-full bg-primary/30 blur-[150px]"
+        className="bg-primary/30 absolute h-[650px] w-[650px] rounded-full blur-[150px]"
       />
       <motion.div
         initial={{ x: -20, y: -20, opacity: 0.1 }}
         animate={{ x: [-10, 10, -10], y: [0, 20, 0], opacity: 0.2 }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-32 left-10 h-48 w-48 rounded-full bg-primary/10 blur-[100px]"
+        className="bg-primary/10 absolute top-32 left-10 h-48 w-48 rounded-full blur-[100px]"
       />
       <motion.div
         initial={{ x: 20, opacity: 0.1 }}
         animate={{ x: [10, -10, 10], opacity: 0.2 }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-32 right-10 h-52 w-52 rounded-full bg-primary/10 blur-[100px]"
+        className="bg-primary/10 absolute right-10 bottom-32 h-52 w-52 rounded-full blur-[100px]"
       />
 
       {/* ======= HERO TITLE (enter second) ======= */}
@@ -100,7 +100,7 @@ export default function LandingPlaceholder() {
         initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="relative z-10 text-center text-4xl md:text-5xl font-bold bg-gradient-to-br from-foreground to-foreground/60 bg-clip-text text-transparent">
+        className="from-foreground to-foreground/60 relative z-10 bg-gradient-to-br bg-clip-text text-center text-4xl font-bold text-transparent md:text-5xl">
         Grid is coming soon.
       </motion.h1>
 
@@ -109,7 +109,7 @@ export default function LandingPlaceholder() {
         initial={{ opacity: 0, filter: "blur(6px)", y: 8 }}
         animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
         transition={{ delay: 0.35, duration: 0.6 }}
-        className="relative z-10 mt-4 max-w-md text-center text-muted-foreground text-base md:text-lg">
+        className="text-muted-foreground relative z-10 mt-4 max-w-md text-center text-base md:text-lg">
         Where clarity meets productivity.
       </motion.p>
 
@@ -118,24 +118,14 @@ export default function LandingPlaceholder() {
         initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ delay: 0.55, duration: 0.6 }}
-        className="relative z-10 mt-10 flex flex-col sm:flex-row gap-4">
+        className="relative z-10 mt-10 flex flex-col gap-4 sm:flex-row">
         {/* PRIMARY */}
         <Button
           asChild
-          className="
-            group
-            px-10 
-            py-5 
-            shadow-sm 
-            bg-primary
-            text-primary-foreground
-            hover:bg-primary/90
-            transition-colors
-            flex items-center gap-2
-          ">
+          className="group bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2 px-10 py-5 shadow-sm transition-colors">
           <Link href="/signup">
             Get Started
-            <ArrowRight className="w-5 h-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />
+            <ArrowRight className="h-5 w-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />
           </Link>
         </Button>
 
@@ -143,22 +133,10 @@ export default function LandingPlaceholder() {
         <Button
           asChild
           variant="outline"
-          className="
-            group
-            px-10 
-            py-5 
-            text-base 
-            shadow-sm 
-            bg-background/40
-            border border-border/60
-            backdrop-blur-md
-            hover:bg-background/60
-            transition-colors
-            flex items-center gap-2
-          ">
+          className="group bg-background/40 border-border/60 hover:bg-background/60 flex items-center gap-2 border px-10 py-5 text-base shadow-sm backdrop-blur-md transition-colors">
           <Link href="/login">
             Log In
-            <ArrowRight className="w-5 h-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />
+            <ArrowRight className="h-5 w-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />
           </Link>
         </Button>
       </motion.div>

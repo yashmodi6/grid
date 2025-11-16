@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 
 interface PopoverProps extends React.ComponentProps<typeof PopoverPrimitive.Root> {
   stayOpenOnInteraction?: boolean;
@@ -31,7 +31,7 @@ function Popover({
       data-slot="popover"
       {...props}
       open={open}
-      onOpenChange={next => {
+      onOpenChange={(next) => {
         // If stayOpenOnInteraction, only allow closing on outside click.
         if (stayOpenOnInteraction && !next && open) {
           // Radix passes `next=false` also on inner clicks/keyboard — ignore those.
@@ -70,38 +70,38 @@ function PopoverContent({
         onPointerDownOutside={(e) => {
           if (stayOpenOnInteraction) {
             // Only close if click is truly outside popover AND trigger
-            const isInsidePopover = e.target.closest("[data-slot='popover-content']")
-            const isInsideTrigger = e.target.closest("[data-slot='popover-trigger']")
+            const isInsidePopover = e.target.closest("[data-slot='popover-content']");
+            const isInsideTrigger = e.target.closest("[data-slot='popover-trigger']");
 
             if (isInsidePopover || isInsideTrigger) {
-              e.preventDefault()
-              return
+              e.preventDefault();
+              return;
             }
           }
 
-          onPointerDownOutside?.(e)
+          onPointerDownOutside?.(e);
         }}
         onInteractOutside={(e) => {
           if (stayOpenOnInteraction) {
-            const isInsidePopover = e.target.closest("[data-slot='popover-content']")
-            const isInsideTrigger = e.target.closest("[data-slot='popover-trigger']")
+            const isInsidePopover = e.target.closest("[data-slot='popover-content']");
+            const isInsideTrigger = e.target.closest("[data-slot='popover-trigger']");
 
             if (isInsidePopover || isInsideTrigger) {
-              e.preventDefault()
-              return
+              e.preventDefault();
+              return;
             }
           }
 
-          onInteractOutside?.(e)
+          onInteractOutside?.(e);
         }}
         className={cn(
-          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 rounded-md border p-4 shadow-md w-72 z-50",
+          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 z-50 w-72 rounded-md border p-4 shadow-md",
           className
         )}
         {...props}
       />
     </PopoverPrimitive.Portal>
-  )
+  );
 }
 
 function PopoverAnchor({ ...props }: React.ComponentProps<typeof PopoverPrimitive.Anchor>) {

@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Moon, Sun, Laptop } from "lucide-react";
 import { flushSync } from "react-dom";
+import { cn } from "@/utils/cn";
 
-import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -13,8 +13,7 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 
-interface AnimatedThemeTogglerProps
-  extends React.ComponentPropsWithoutRef<"button"> {
+interface AnimatedThemeTogglerProps extends React.ComponentPropsWithoutRef<"button"> {
   duration?: number;
 }
 
@@ -23,45 +22,37 @@ export const AnimatedThemeToggler = ({
   duration = 400,
   ...props
 }: AnimatedThemeTogglerProps) => {
-  const [theme, setTheme] = useState<"light" | "dark" | "system">("system");
+  // ✅ Initialize theme from localStorage (no effect needed)
+  const [theme, setTheme] = useState<"light" | "dark" | "system">(() => {
+    const saved = localStorage.getItem("theme") as "light" | "dark" | "system" | null;
+
+    return saved ?? "system";
+  });
+
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  // Detect theme (including system)
+  // ✅ Effect ONLY syncs external system (DOM + listeners)
   useEffect(() => {
-    const saved = localStorage.getItem("theme") as
-      | "light"
-      | "dark"
-      | "system"
-      | null;
+    const root = document.documentElement;
 
-    if (saved) {
-      setTheme(saved);
-      if (saved === "dark") document.documentElement.classList.add("dark");
-      if (saved === "light") document.documentElement.classList.remove("dark");
-      if (saved === "system")
-        document.documentElement.classList.toggle(
-          "dark",
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-        );
+    if (theme === "dark") {
+      root.classList.add("dark");
+    } else if (theme === "light") {
+      root.classList.remove("dark");
+    } else {
+      root.classList.toggle("dark", window.matchMedia("(prefers-color-scheme: dark)").matches);
     }
 
     const updateSystem = () => {
       if (theme === "system") {
-        document.documentElement.classList.toggle(
-          "dark",
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-        );
+        root.classList.toggle("dark", window.matchMedia("(prefers-color-scheme: dark)").matches);
       }
     };
 
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", updateSystem);
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    mql.addEventListener("change", updateSystem);
 
-    return () =>
-      window
-        .matchMedia("(prefers-color-scheme: dark)")
-        .removeEventListener("change", updateSystem);
+    return () => mql.removeEventListener("change", updateSystem);
   }, [theme]);
 
   const applyTheme = useCallback(
@@ -72,35 +63,20 @@ export const AnimatedThemeToggler = ({
         flushSync(() => {
           setTheme(next);
           localStorage.setItem("theme", next);
-
-          if (next === "dark") {
-            document.documentElement.classList.add("dark");
-          } else if (next === "light") {
-            document.documentElement.classList.remove("dark");
-          } else {
-            document.documentElement.classList.toggle(
-              "dark",
-              window.matchMedia("(prefers-color-scheme: dark)").matches
-            );
-          }
         });
       }).ready;
 
-      const { top, left, width, height } =
-        buttonRef.current.getBoundingClientRect();
-      const x = left + width / 2;
-      const y = top + height / 2;
+      const rect = buttonRef.current.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
       const maxRadius = Math.hypot(
-        Math.max(left, window.innerWidth - left),
-        Math.max(top, window.innerHeight - top)
+        Math.max(rect.left, window.innerWidth - rect.left),
+        Math.max(rect.top, window.innerHeight - rect.top)
       );
 
       document.documentElement.animate(
         {
-          clipPath: [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(${maxRadius}px at ${x}px ${y}px)`,
-          ],
+          clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${maxRadius}px at ${x}px ${y}px)`],
         },
         {
           duration,
@@ -112,12 +88,7 @@ export const AnimatedThemeToggler = ({
     [duration]
   );
 
-  const Icon =
-    theme === "dark"
-      ? Sun
-      : theme === "light"
-      ? Moon
-      : Laptop; // system
+  const Icon = theme === "dark" ? Sun : theme === "light" ? Moon : Laptop;
 
   return (
     <DropdownMenu>
@@ -125,11 +96,10 @@ export const AnimatedThemeToggler = ({
         <button
           ref={buttonRef}
           className={cn(
-            "p-2 rounded-md border border-border bg-background/40 backdrop-blur-md hover:bg-background/60 transition flex items-center justify-center",
+            "border-border bg-background/40 hover:bg-background/60 flex items-center justify-center rounded-md border p-2 backdrop-blur-md transition",
             className
           )}
-          {...props}
-        >
+          {...props}>
           <Icon className="h-4 w-4" />
         </button>
       </DropdownMenuTrigger>

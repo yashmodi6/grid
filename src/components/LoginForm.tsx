@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -38,13 +38,13 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
 
         {/* PASSWORD */}
         <Field>
-          <div className="flex items-center mb-1">
+          <div className="mb-1 flex items-center">
             <FieldLabel htmlFor="password">Password</FieldLabel>
 
             {/* FORGOT PASSWORD LINK */}
             <Link
               href="/forgot-password"
-              className="ml-auto text-sm underline-offset-4 hover:underline text-muted-foreground">
+              className="text-muted-foreground ml-auto text-sm underline-offset-4 hover:underline">
               Forgot password?
             </Link>
           </div>
@@ -63,9 +63,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
               type="button"
               variant="ghost"
               size="icon"
-              className="absolute inset-y-0 right-0 text-muted-foreground hover:bg-transparent"
+              className="text-muted-foreground absolute inset-y-0 right-0 hover:bg-transparent"
               onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </Button>
           </div>
         </Field>
@@ -82,13 +82,13 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
 
         {/* GOOGLE LOGIN */}
         <Field>
-          <Button type="button" variant="outline" className="w-full flex items-center gap-2">
-            <GoogleIcon className="w-5 h-5" />
+          <Button type="button" variant="outline" className="flex w-full items-center gap-2">
+            <GoogleIcon className="h-5 w-5" />
             Login with Google
           </Button>
 
           {/* SIGN UP */}
-          <FieldDescription className="text-center text-sm mt-2">
+          <FieldDescription className="mt-2 text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link href="/signup" className="underline underline-offset-4">
               Sign up

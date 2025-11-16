@@ -10,27 +10,36 @@ export const passwordRequirements = [
 ];
 
 export function getPasswordStrength(password: string) {
-  const requirements = passwordRequirements.map(req => ({
+  const requirements = passwordRequirements.map((req) => ({
     met: req.regex.test(password),
     text: req.text,
   }));
 
-  const score = requirements.filter(r => r.met).length;
+  const score = requirements.filter((r) => r.met).length;
 
   const barColor =
-    score === 0 ? "bg-border" :
-    score <= 1 ? "bg-red-500" :
-    score <= 2 ? "bg-orange-500" :
-    score <= 3 ? "bg-amber-500" :
-    score === 4 ? "bg-yellow-400" :
-    "bg-green-500";
+    score === 0
+      ? "bg-border"
+      : score <= 1
+        ? "bg-red-500"
+        : score <= 2
+          ? "bg-orange-500"
+          : score <= 3
+            ? "bg-amber-500"
+            : score === 4
+              ? "bg-yellow-400"
+              : "bg-green-500";
 
   const label =
-    score === 0 ? "Enter a password" :
-    score <= 2 ? "Weak password" :
-    score <= 3 ? "Medium password" :
-    score === 4 ? "Strong password" :
-    "Very strong password";
+    score === 0
+      ? "Enter a password"
+      : score <= 2
+        ? "Weak password"
+        : score <= 3
+          ? "Medium password"
+          : score === 4
+            ? "Strong password"
+            : "Very strong password";
 
   return {
     score,

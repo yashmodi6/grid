@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useId } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,18 +17,9 @@ import {
   FieldDescription,
 } from "@/components/ui/field";
 
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
-import {
-  EyeIcon,
-  EyeOffIcon,
-  CheckIcon,
-  XIcon,
-} from "lucide-react";
+import { EyeIcon, EyeOffIcon, CheckIcon, XIcon } from "lucide-react";
 import { GoogleIcon } from "@/icons/GoogleIcon";
 
 import { getPasswordStrength } from "@/utils/passwordStrength";
@@ -42,8 +33,7 @@ function PasswordField() {
   const [open, setOpen] = useState(false);
 
   const id = useId();
-  const { score, requirements, barColor, label } =
-    getPasswordStrength(password);
+  const { score, requirements, barColor, label } = getPasswordStrength(password);
 
   return (
     <Field>
@@ -70,9 +60,8 @@ function PasswordField() {
             type="button"
             variant="ghost"
             size="icon"
-            className="absolute inset-y-0 right-0 hover:bg-transparent text-muted-foreground"
-            onClick={() => setVisible(!visible)}
-          >
+            className="text-muted-foreground absolute inset-y-0 right-0 hover:bg-transparent"
+            onClick={() => setVisible(!visible)}>
             {visible ? <EyeOffIcon /> : <EyeIcon />}
           </Button>
         </div>
@@ -81,8 +70,7 @@ function PasswordField() {
         <PopoverContent
           side="bottom"
           align="start"
-          className="w-[260px] p-4 shadow-md border bg-popover rounded-md"
-        >
+          className="bg-popover w-[260px] rounded-md border p-4 shadow-md">
           {/* PROGRESS BAR */}
           <div className="mb-3 flex h-1 w-full gap-1">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -97,7 +85,7 @@ function PasswordField() {
           </div>
 
           {/* LABEL */}
-          <p className="text-sm font-medium mb-2">{label}</p>
+          <p className="mb-2 text-sm font-medium">{label}</p>
 
           {/* REQUIREMENTS */}
           <ul className="space-y-1.5">
@@ -106,17 +94,11 @@ function PasswordField() {
                 {req.met ? (
                   <CheckIcon className="size-4 text-green-600" />
                 ) : (
-                  <XIcon className="size-4 text-muted-foreground" />
+                  <XIcon className="text-muted-foreground size-4" />
                 )}
 
                 <span
-                  className={cn(
-                    "text-xs",
-                    req.met
-                      ? "text-green-600"
-                      : "text-muted-foreground"
-                  )}
-                >
+                  className={cn("text-xs", req.met ? "text-green-600" : "text-muted-foreground")}>
                   {req.text}
                 </span>
               </li>
@@ -132,10 +114,7 @@ function PasswordField() {
    SIGN UP FORM
 --------------------------------------------------------------- */
 
-export function SignUpForm({
-  className,
-  ...props
-}: React.ComponentProps<"form">) {
+export function SignUpForm({ className, ...props }: React.ComponentProps<"form">) {
   const [confirmVisible, setConfirmVisible] = useState(false);
 
   return (
@@ -165,11 +144,7 @@ export function SignUpForm({
         {/* EMAIL */}
         <Field>
           <FieldLabel>Email</FieldLabel>
-          <Input
-            type="email"
-            placeholder="something@example.com"
-            required
-          />
+          <Input type="email" placeholder="something@example.com" required />
         </Field>
 
         {/* PASSWORD + CONFIRM */}
@@ -194,16 +169,9 @@ export function SignUpForm({
                 type="button"
                 variant="ghost"
                 size="icon"
-                className="absolute inset-y-0 right-0 hover:bg-transparent text-muted-foreground"
-                onClick={() =>
-                  setConfirmVisible(!confirmVisible)
-                }
-              >
-                {confirmVisible ? (
-                  <EyeOffIcon />
-                ) : (
-                  <EyeIcon />
-                )}
+                className="text-muted-foreground absolute inset-y-0 right-0 hover:bg-transparent"
+                onClick={() => setConfirmVisible(!confirmVisible)}>
+                {confirmVisible ? <EyeOffIcon /> : <EyeIcon />}
               </Button>
             </div>
           </Field>
@@ -215,20 +183,13 @@ export function SignUpForm({
 
           <Label
             htmlFor="agree"
-            className="block text-xs text-muted-foreground leading-snug cursor-pointer"
-          >
+            className="text-muted-foreground block cursor-pointer text-xs leading-snug">
             By continuing, you agree to our{" "}
-            <Link
-              href="/terms-of-service"
-              className="underline underline-offset-4"
-            >
+            <Link href="/terms-of-service" className="underline underline-offset-4">
               Terms of Service
             </Link>{" "}
             and{" "}
-            <Link
-              href="/privacy-policy"
-              className="underline underline-offset-4"
-            >
+            <Link href="/privacy-policy" className="underline underline-offset-4">
               Privacy Policy
             </Link>
             .
@@ -243,21 +204,14 @@ export function SignUpForm({
         <FieldSeparator>Or sign up with</FieldSeparator>
 
         {/* GOOGLE SIGN-IN */}
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full flex items-center gap-2"
-        >
-          <GoogleIcon className="w-5 h-5" />
+        <Button type="button" variant="outline" className="flex w-full items-center gap-2">
+          <GoogleIcon className="h-5 w-5" />
           Sign up with Google
         </Button>
 
-        <FieldDescription className="text-center text-sm mt-2">
+        <FieldDescription className="mt-2 text-center text-sm">
           Already have an account?{" "}
-          <Link
-            href="/login"
-            className="underline underline-offset-4"
-          >
+          <Link href="/login" className="underline underline-offset-4">
             Login
           </Link>
         </FieldDescription>
