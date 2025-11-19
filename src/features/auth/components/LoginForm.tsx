@@ -5,66 +5,58 @@ import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Spinner } from "@/components/ui/spinner";
+
 import { Button } from "@/components/ui/button";
 import {
   Field,
-  FieldDescription,
-  FieldError,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
+  FieldDescription,
+  FieldError,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { GoogleIcon } from "@/icons/GoogleIcon";
-import { Eye, EyeOff } from "lucide-react";
-import { KeyboardStatus } from "@/components/KeyboardStatus";
-import { handleFormNavigation } from "@/utils/handleFormNavigation";
-import { useKeyboardStatus } from "@/hooks/useKeyboardStatus";
+import { Spinner } from "@/components/ui/spinner";
 
+import { Eye, EyeOff } from "lucide-react";
+import { GoogleIcon } from "@/components/icons/GoogleIcon";
+import { handleFormNavigation } from "@/features/auth/utils/handleFormNavigation";
+import { useKeyboardStatus } from "@/features/auth/hooks/useKeyboardStatus";
+import { KeyboardStatus } from "@/features/auth/components/KeyboardStatus";
 //
 // -----------------------
 // Validation Schema
 // -----------------------
-const signUpSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
+const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number"),
+  password: z.string().min(1, "Password is required"),
 });
 
-type SignUpValues = z.infer<typeof signUpSchema>;
+type LoginValues = z.infer<typeof loginSchema>;
 
 //
 // -----------------------
 // Component
 // -----------------------
-export function SignUpForm() {
+export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
   const { keyboardInfo, handleKeyboardState, resetKeyboardState } = useKeyboardStatus();
 
-  const form = useForm<SignUpValues>({
-    resolver: zodResolver(signUpSchema),
+  const form = useForm<LoginValues>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
   });
 
-  async function onSubmit(values: SignUpValues) {
-    console.log("Sign up values:", values);
+  async function onSubmit(values: LoginValues) {
+    console.log("Login values:", values);
 
-    // simulate network request
-    await new Promise((resolve) => setTimeout(resolve, 9000000));
-
-    // then redirect / toast / supabase action here
+    // simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 1500));
   }
 
   return (
@@ -73,31 +65,14 @@ export function SignUpForm() {
       noValidate
       onSubmit={form.handleSubmit(onSubmit)}
       onKeyDown={(e) => handleFormNavigation(e, () => form.handleSubmit(onSubmit)())}>
-      <FieldGroup className="gap-5">
+      <FieldGroup>
         {/* Header */}
-        <div className="text-center">
-          <h1 className="text-2xl font-bold">Create your account</h1>
-          <p className="text-muted-foreground text-sm">Enter your details to get started</p>
+        <div className="flex flex-col items-center gap-1 text-center">
+          <h1 className="text-2xl font-bold">Login to your account</h1>
+          <p className="text-muted-foreground text-sm text-balance">
+            Enter your email below to login to your account
+          </p>
         </div>
-
-        {/* Name */}
-        <Controller
-          name="name"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="name">Full Name</FieldLabel>
-              <Input
-                {...field}
-                id="name"
-                placeholder="John Doe"
-                aria-invalid={fieldState.invalid}
-                autoFocus
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
 
         {/* Email */}
         <Controller
@@ -106,13 +81,16 @@ export function SignUpForm() {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="email">Email</FieldLabel>
+
               <Input
+                autoFocus
                 {...field}
                 id="email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="something@example.com"
                 aria-invalid={fieldState.invalid}
               />
+
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -124,29 +102,31 @@ export function SignUpForm() {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <div className="flex items-center justify-between">
+              {/* Label + forgot link */}
+              <div className="mb-1 flex items-center">
                 <FieldLabel htmlFor="password">Password</FieldLabel>
 
-                <KeyboardStatus
-                  focused={isPasswordFocused}
-                  caps={keyboardInfo.caps}
-                  num={keyboardInfo.num}
-                />
+                <Link
+                  href="/forgot-password"
+                  className="text-muted-foreground ml-auto text-sm underline-offset-4 hover:underline">
+                  Forgot password?
+                </Link>
               </div>
 
-              <div className="relative mt-1">
+              {/* Password field with toggle */}
+              <div className="relative">
                 <Input
                   {...field}
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="pr-10"
                   aria-invalid={fieldState.invalid}
+                  className="pr-10"
                   onFocus={() => setIsPasswordFocused(true)}
                   onBlur={() => {
-                    field.onBlur();
                     setIsPasswordFocused(false);
                     resetKeyboardState();
+                    field.onBlur();
                   }}
                   onKeyDown={handleKeyboardState}
                   onKeyUp={handleKeyboardState}
@@ -154,61 +134,51 @@ export function SignUpForm() {
 
                 <Button
                   type="button"
-                  size="icon"
                   variant="ghost"
-                  className="absolute inset-y-0 right-0 hover:bg-transparent"
+                  size="icon"
+                  className="text-muted-foreground absolute inset-y-0 right-0 hover:bg-transparent"
                   onClick={() => setShowPassword((prev) => !prev)}>
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
 
-              {!fieldState.invalid && isPasswordFocused && (
-                <FieldDescription className="text-xs">
-                  Must include uppercase, lowercase, number, and at least 8 characters.
-                </FieldDescription>
-              )}
+              {/* Keyboard status */}
+              <KeyboardStatus
+                focused={isPasswordFocused}
+                caps={keyboardInfo.caps}
+                num={keyboardInfo.num}
+              />
 
+              {/* Validation errors */}
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
 
-        {/* Submit Button */}
-        <Field orientation="vertical">
+        {/* Submit */}
+        <Field>
           <Button
-            className="flex w-full items-center justify-center gap-2"
             type="submit"
+            className="flex w-full items-center justify-center gap-2"
             disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting && <Spinner className="h-4 w-4" />}
-            {form.formState.isSubmitting ? "Signing Up..." : "Sign Up"}
+            {form.formState.isSubmitting ? "Logging in..." : "Login"}
           </Button>
-
-          <FieldDescription className="text-muted-foreground text-xs">
-            By continuing, you agree to our{" "}
-            <Link href="/terms-of-service" className="underline">
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link href="/privacy-policy" className="underline">
-              Privacy Policy
-            </Link>
-            .
-          </FieldDescription>
         </Field>
 
         <FieldSeparator>Or continue with</FieldSeparator>
 
-        {/* Google Sign Up */}
+        {/* Google login */}
         <Field>
           <Button type="button" variant="outline" className="flex w-full items-center gap-2">
             <GoogleIcon className="h-5 w-5" />
-            Sign Up with Google
+            Login with Google
           </Button>
 
           <FieldDescription className="mt-2 text-center text-sm">
-            Already have an account?{" "}
-            <Link href="/login" className="underline">
-              Log In
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" className="underline underline-offset-4">
+              Sign up
             </Link>
           </FieldDescription>
         </Field>

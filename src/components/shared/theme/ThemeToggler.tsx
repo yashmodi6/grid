@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 import { Moon, Sun, Laptop } from "lucide-react";
 import { flushSync } from "react-dom";
 import { useTheme } from "next-themes";
-import { cn } from "@/utils/cn";
+import { cn } from "@/lib/utils/cn";
 
 import {
   DropdownMenu,

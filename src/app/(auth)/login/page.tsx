@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { GridLogo } from "@/icons/GridLogo";
-import { LoginForm } from "@/components/LoginForm";
+import { GridLogo } from "@/components/icons/GridLogo";
+import { LoginForm } from "@/features/auth/components/LoginForm";
 
 export default function LoginPage() {
   return (

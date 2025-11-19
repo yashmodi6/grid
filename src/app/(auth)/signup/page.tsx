@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { GridLogo } from "@/icons/GridLogo";
-import { SignUpForm } from "@/components/SignUpForm";
+import { GridLogo } from "@/components/icons/GridLogo";
+import { SignUpForm } from "@/features/auth/components/SignUpForm";
 
 export default function SignUpPage() {
   return (
