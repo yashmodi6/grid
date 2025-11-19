@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -47,8 +47,7 @@ export function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
-  const { keyboardInfo, handleKeyboardState, resetKeyboardState } =
-    useKeyboardStatus();
+  const { keyboardInfo, handleKeyboardState, resetKeyboardState } = useKeyboardStatus();
 
   const form = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
@@ -59,8 +58,13 @@ export function SignUpForm() {
     },
   });
 
-  function onSubmit(values: SignUpValues) {
+  async function onSubmit(values: SignUpValues) {
     console.log("Sign up values:", values);
+
+    // simulate network request
+    await new Promise((resolve) => setTimeout(resolve, 9000000));
+
+    // then redirect / toast / supabase action here
   }
 
   return (
@@ -68,17 +72,12 @@ export function SignUpForm() {
       className="flex flex-col gap-6"
       noValidate
       onSubmit={form.handleSubmit(onSubmit)}
-      onKeyDown={(e) =>
-        handleFormNavigation(e, () => form.handleSubmit(onSubmit)())
-      }
-    >
+      onKeyDown={(e) => handleFormNavigation(e, () => form.handleSubmit(onSubmit)())}>
       <FieldGroup className="gap-5">
         {/* Header */}
         <div className="text-center">
           <h1 className="text-2xl font-bold">Create your account</h1>
-          <p className="text-sm text-muted-foreground">
-            Enter your details to get started
-          </p>
+          <p className="text-muted-foreground text-sm">Enter your details to get started</p>
         </div>
 
         {/* Name */}
@@ -95,9 +94,7 @@ export function SignUpForm() {
                 aria-invalid={fieldState.invalid}
                 autoFocus
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -116,9 +113,7 @@ export function SignUpForm() {
                 placeholder="you@example.com"
                 aria-invalid={fieldState.invalid}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -136,7 +131,6 @@ export function SignUpForm() {
                   focused={isPasswordFocused}
                   caps={keyboardInfo.caps}
                   num={keyboardInfo.num}
-                  shift={keyboardInfo.shift}
                 />
               </div>
 
@@ -163,26 +157,18 @@ export function SignUpForm() {
                   size="icon"
                   variant="ghost"
                   className="absolute inset-y-0 right-0 hover:bg-transparent"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
+                  onClick={() => setShowPassword((prev) => !prev)}>
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
 
               {!fieldState.invalid && isPasswordFocused && (
                 <FieldDescription className="text-xs">
-                  Must include uppercase, lowercase, number, and at least 8
-                  characters.
+                  Must include uppercase, lowercase, number, and at least 8 characters.
                 </FieldDescription>
               )}
 
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -190,14 +176,14 @@ export function SignUpForm() {
         {/* Submit Button */}
         <Field orientation="vertical">
           <Button
-            className="w-full"
+            className="flex w-full items-center justify-center gap-2"
             type="submit"
-            disabled={form.formState.isSubmitting}
-          >
+            disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting && <Spinner className="h-4 w-4" />}
             {form.formState.isSubmitting ? "Signing Up..." : "Sign Up"}
           </Button>
 
-          <FieldDescription className="text-xs text-muted-foreground">
+          <FieldDescription className="text-muted-foreground text-xs">
             By continuing, you agree to our{" "}
             <Link href="/terms-of-service" className="underline">
               Terms of Service
@@ -214,11 +200,7 @@ export function SignUpForm() {
 
         {/* Google Sign Up */}
         <Field>
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full flex items-center gap-2"
-          >
+          <Button type="button" variant="outline" className="flex w-full items-center gap-2">
             <GoogleIcon className="h-5 w-5" />
             Sign Up with Google
           </Button>

@@ -22,7 +22,7 @@ import { GoogleIcon } from "@/icons/GoogleIcon";
 import { handleFormNavigation } from "@/utils/handleFormNavigation";
 import { useKeyboardStatus } from "@/hooks/useKeyboardStatus";
 import { KeyboardStatus } from "@/components/KeyboardStatus";
-
+import { Spinner } from "@/components/ui/spinner";
 //
 // -----------------------
 // Validation Schema
@@ -42,8 +42,7 @@ export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
-  const { keyboardInfo, handleKeyboardState, resetKeyboardState } =
-    useKeyboardStatus();
+  const { keyboardInfo, handleKeyboardState, resetKeyboardState } = useKeyboardStatus();
 
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
@@ -53,8 +52,11 @@ export function LoginForm() {
     },
   });
 
-  function onSubmit(values: LoginValues) {
+  async function onSubmit(values: LoginValues) {
     console.log("Login values:", values);
+
+    // simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 1500));
   }
 
   return (
@@ -62,15 +64,12 @@ export function LoginForm() {
       className="flex flex-col gap-6"
       noValidate
       onSubmit={form.handleSubmit(onSubmit)}
-      onKeyDown={(e) =>
-        handleFormNavigation(e, () => form.handleSubmit(onSubmit)())
-      }
-    >
+      onKeyDown={(e) => handleFormNavigation(e, () => form.handleSubmit(onSubmit)())}>
       <FieldGroup>
         {/* Header */}
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Login to your account</h1>
-          <p className="text-sm text-muted-foreground text-balance">
+          <p className="text-muted-foreground text-sm text-balance">
             Enter your email below to login to your account
           </p>
         </div>
@@ -84,6 +83,7 @@ export function LoginForm() {
               <FieldLabel htmlFor="email">Email</FieldLabel>
 
               <Input
+                autoFocus
                 {...field}
                 id="email"
                 type="email"
@@ -91,9 +91,7 @@ export function LoginForm() {
                 aria-invalid={fieldState.invalid}
               />
 
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -110,8 +108,7 @@ export function LoginForm() {
 
                 <Link
                   href="/forgot-password"
-                  className="ml-auto text-sm text-muted-foreground underline-offset-4 hover:underline"
-                >
+                  className="text-muted-foreground ml-auto text-sm underline-offset-4 hover:underline">
                   Forgot password?
                 </Link>
               </div>
@@ -139,14 +136,9 @@ export function LoginForm() {
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute inset-y-0 right-0 text-muted-foreground hover:bg-transparent"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
+                  className="text-muted-foreground absolute inset-y-0 right-0 hover:bg-transparent"
+                  onClick={() => setShowPassword((prev) => !prev)}>
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
 
@@ -155,13 +147,10 @@ export function LoginForm() {
                 focused={isPasswordFocused}
                 caps={keyboardInfo.caps}
                 num={keyboardInfo.num}
-                shift={keyboardInfo.shift}
               />
 
               {/* Validation errors */}
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -170,9 +159,9 @@ export function LoginForm() {
         <Field>
           <Button
             type="submit"
-            className="w-full"
-            disabled={form.formState.isSubmitting}
-          >
+            className="flex w-full items-center justify-center gap-2"
+            disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting && <Spinner className="h-4 w-4" />}
             {form.formState.isSubmitting ? "Logging in..." : "Login"}
           </Button>
         </Field>
@@ -181,21 +170,14 @@ export function LoginForm() {
 
         {/* Google login */}
         <Field>
-          <Button
-            type="button"
-            variant="outline"
-            className="flex w-full items-center gap-2"
-          >
+          <Button type="button" variant="outline" className="flex w-full items-center gap-2">
             <GoogleIcon className="h-5 w-5" />
             Login with Google
           </Button>
 
           <FieldDescription className="mt-2 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link
-              href="/signup"
-              className="underline underline-offset-4"
-            >
+            <Link href="/signup" className="underline underline-offset-4">
               Sign up
             </Link>
           </FieldDescription>

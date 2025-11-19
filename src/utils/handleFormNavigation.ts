@@ -6,12 +6,18 @@ export function handleFormNavigation(
   if (!keys.includes(e.key)) return;
 
   const form = e.currentTarget;
+
+  // Precisely typed: HTMLInputElement | HTMLButtonElement
   const inputs = Array.from(
-    form.querySelectorAll("input:not([type=hidden]), button[type='submit']")
+    form.querySelectorAll<HTMLInputElement | HTMLButtonElement>(
+      "input:not([type=hidden]), button[type='submit']"
+    )
   );
 
   const current = e.target as HTMLElement;
-  const index = inputs.indexOf(current as any);
+
+  // Find index safely (avoids any)
+  const index = inputs.findIndex((el) => el === current);
 
   // Prevent unwanted browser submit
   if (e.key !== "Enter" || current.tagName !== "BUTTON") {
