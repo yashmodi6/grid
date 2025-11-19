@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { Moon, Sun, Laptop } from "lucide-react";
 import { flushSync } from "react-dom";
+import { useTheme } from "next-themes";
 import { cn } from "@/utils/cn";
 
 import {
@@ -22,38 +23,10 @@ export const AnimatedThemeToggler = ({
   duration = 400,
   ...props
 }: AnimatedThemeTogglerProps) => {
-  // ✅ Initialize theme from localStorage (no effect needed)
-  const [theme, setTheme] = useState<"light" | "dark" | "system">(() => {
-    const saved = localStorage.getItem("theme") as "light" | "dark" | "system" | null;
-
-    return saved ?? "system";
-  });
-
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  // ✅ Effect ONLY syncs external system (DOM + listeners)
-  useEffect(() => {
-    const root = document.documentElement;
-
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else if (theme === "light") {
-      root.classList.remove("dark");
-    } else {
-      root.classList.toggle("dark", window.matchMedia("(prefers-color-scheme: dark)").matches);
-    }
-
-    const updateSystem = () => {
-      if (theme === "system") {
-        root.classList.toggle("dark", window.matchMedia("(prefers-color-scheme: dark)").matches);
-      }
-    };
-
-    const mql = window.matchMedia("(prefers-color-scheme: dark)");
-    mql.addEventListener("change", updateSystem);
-
-    return () => mql.removeEventListener("change", updateSystem);
-  }, [theme]);
+  // ⭐ Use next-themes instead of manual state logic
+  const { theme, setTheme } = useTheme();
 
   const applyTheme = useCallback(
     async (next: "light" | "dark" | "system") => {
@@ -62,7 +35,6 @@ export const AnimatedThemeToggler = ({
       await document.startViewTransition(() => {
         flushSync(() => {
           setTheme(next);
-          localStorage.setItem("theme", next);
         });
       }).ready;
 
@@ -85,7 +57,7 @@ export const AnimatedThemeToggler = ({
         }
       );
     },
-    [duration]
+    [duration, setTheme]
   );
 
   const Icon = theme === "dark" ? Sun : theme === "light" ? Moon : Laptop;

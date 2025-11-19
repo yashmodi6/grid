@@ -1,220 +1,235 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { useState, useId } from "react";
-import { cn } from "@/utils/cn";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-
 import {
   Field,
+  FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-  FieldDescription,
 } from "@/components/ui/field";
-
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-
-import { EyeIcon, EyeOffIcon, CheckIcon, XIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { GoogleIcon } from "@/icons/GoogleIcon";
+import { Eye, EyeOff } from "lucide-react";
+import { KeyboardStatus } from "@/components/KeyboardStatus";
+import { handleFormNavigation } from "@/utils/handleFormNavigation";
+import { useKeyboardStatus } from "@/hooks/useKeyboardStatus";
 
-import { getPasswordStrength } from "@/utils/passwordStrength";
+//
+// -----------------------
+// Validation Schema
+// -----------------------
+const signUpSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
+});
 
-/* --------------------------------------------------------------
-   PASSWORD FIELD 
---------------------------------------------------------------- */
-function PasswordField() {
-  const [password, setPassword] = useState("");
-  const [visible, setVisible] = useState(false);
-  const [open, setOpen] = useState(false);
+type SignUpValues = z.infer<typeof signUpSchema>;
 
-  const id = useId();
-  const { score, requirements, barColor, label } = getPasswordStrength(password);
+//
+// -----------------------
+// Component
+// -----------------------
+export function SignUpForm() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
-  return (
-    <Field>
-      <FieldLabel htmlFor={id}>Password</FieldLabel>
+  const { keyboardInfo, handleKeyboardState, resetKeyboardState } =
+    useKeyboardStatus();
 
-      <Popover open={open} onOpenChange={setOpen}>
-        <div className="relative">
-          <PopoverTrigger asChild>
-            <Input
-              id={id}
-              type={visible ? "text" : "password"}
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onFocus={() => setOpen(true)}
-              onBlur={() => setOpen(false)}
-              required
-              className="pr-10"
-            />
-          </PopoverTrigger>
+  const form = useForm<SignUpValues>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  });
 
-          {/* EYE TOGGLE */}
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="text-muted-foreground absolute inset-y-0 right-0 hover:bg-transparent"
-            onClick={() => setVisible(!visible)}>
-            {visible ? <EyeOffIcon /> : <EyeIcon />}
-          </Button>
-        </div>
-
-        {/* PASSWORD POPOVER CONTENT */}
-        <PopoverContent
-          side="bottom"
-          align="start"
-          className="bg-popover w-[260px] rounded-md border p-4 shadow-md">
-          {/* PROGRESS BAR */}
-          <div className="mb-3 flex h-1 w-full gap-1">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <span
-                key={i}
-                className={cn(
-                  "h-full flex-1 rounded-full transition-all",
-                  i < score ? barColor : "bg-border"
-                )}
-              />
-            ))}
-          </div>
-
-          {/* LABEL */}
-          <p className="mb-2 text-sm font-medium">{label}</p>
-
-          {/* REQUIREMENTS */}
-          <ul className="space-y-1.5">
-            {requirements.map((req, i) => (
-              <li key={i} className="flex items-center gap-2">
-                {req.met ? (
-                  <CheckIcon className="size-4 text-green-600" />
-                ) : (
-                  <XIcon className="text-muted-foreground size-4" />
-                )}
-
-                <span
-                  className={cn("text-xs", req.met ? "text-green-600" : "text-muted-foreground")}>
-                  {req.text}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </PopoverContent>
-      </Popover>
-    </Field>
-  );
-}
-
-/* --------------------------------------------------------------
-   SIGN UP FORM
---------------------------------------------------------------- */
-
-export function SignUpForm({ className, ...props }: React.ComponentProps<"form">) {
-  const [confirmVisible, setConfirmVisible] = useState(false);
+  function onSubmit(values: SignUpValues) {
+    console.log("Sign up values:", values);
+  }
 
   return (
-    <form className={cn("flex flex-col gap-4", className)} {...props}>
+    <form
+      className="flex flex-col gap-6"
+      noValidate
+      onSubmit={form.handleSubmit(onSubmit)}
+      onKeyDown={(e) =>
+        handleFormNavigation(e, () => form.handleSubmit(onSubmit)())
+      }
+    >
       <FieldGroup className="gap-5">
-        {/* HEADER */}
-        <div className="flex flex-col items-center gap-1 text-center">
+        {/* Header */}
+        <div className="text-center">
           <h1 className="text-2xl font-bold">Create your account</h1>
-          <p className="text-muted-foreground text-sm text-balance">
-            Enter your details below to get started
+          <p className="text-sm text-muted-foreground">
+            Enter your details to get started
           </p>
         </div>
 
-        {/* FIRST + LAST NAME */}
-        <div className="grid grid-cols-2 gap-3">
-          <Field>
-            <FieldLabel>First Name</FieldLabel>
-            <Input placeholder="John" required />
-          </Field>
-
-          <Field>
-            <FieldLabel>Last Name</FieldLabel>
-            <Input placeholder="Doe" required />
-          </Field>
-        </div>
-
-        {/* EMAIL */}
-        <Field>
-          <FieldLabel>Email</FieldLabel>
-          <Input type="email" placeholder="something@example.com" required />
-        </Field>
-
-        {/* PASSWORD + CONFIRM */}
-        <div className="grid grid-cols-2 gap-3">
-          {/* PASSWORD FIELD */}
-          <PasswordField />
-
-          {/* CONFIRM PASSWORD */}
-          <Field>
-            <FieldLabel>Confirm Password</FieldLabel>
-
-            <div className="relative">
+        {/* Name */}
+        <Controller
+          name="name"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="name">Full Name</FieldLabel>
               <Input
-                type={confirmVisible ? "text" : "password"}
-                placeholder="••••••••"
-                required
-                className="pr-10"
+                {...field}
+                id="name"
+                placeholder="John Doe"
+                aria-invalid={fieldState.invalid}
+                autoFocus
               />
+              {fieldState.invalid && (
+                <FieldError errors={[fieldState.error]} />
+              )}
+            </Field>
+          )}
+        />
 
-              {/* EYE TOGGLE */}
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground absolute inset-y-0 right-0 hover:bg-transparent"
-                onClick={() => setConfirmVisible(!confirmVisible)}>
-                {confirmVisible ? <EyeOffIcon /> : <EyeIcon />}
-              </Button>
-            </div>
-          </Field>
-        </div>
+        {/* Email */}
+        <Controller
+          name="email"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input
+                {...field}
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid && (
+                <FieldError errors={[fieldState.error]} />
+              )}
+            </Field>
+          )}
+        />
 
-        {/* AGREEMENT CHECKBOX */}
-        <div className="flex items-start gap-2">
-          <Checkbox id="agree" required className="mt-1" />
+        {/* Password */}
+        <Controller
+          name="password"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <div className="flex items-center justify-between">
+                <FieldLabel htmlFor="password">Password</FieldLabel>
 
-          <Label
-            htmlFor="agree"
-            className="text-muted-foreground block cursor-pointer text-xs leading-snug">
+                <KeyboardStatus
+                  focused={isPasswordFocused}
+                  caps={keyboardInfo.caps}
+                  num={keyboardInfo.num}
+                  shift={keyboardInfo.shift}
+                />
+              </div>
+
+              <div className="relative mt-1">
+                <Input
+                  {...field}
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  className="pr-10"
+                  aria-invalid={fieldState.invalid}
+                  onFocus={() => setIsPasswordFocused(true)}
+                  onBlur={() => {
+                    field.onBlur();
+                    setIsPasswordFocused(false);
+                    resetKeyboardState();
+                  }}
+                  onKeyDown={handleKeyboardState}
+                  onKeyUp={handleKeyboardState}
+                />
+
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  className="absolute inset-y-0 right-0 hover:bg-transparent"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+
+              {!fieldState.invalid && isPasswordFocused && (
+                <FieldDescription className="text-xs">
+                  Must include uppercase, lowercase, number, and at least 8
+                  characters.
+                </FieldDescription>
+              )}
+
+              {fieldState.invalid && (
+                <FieldError errors={[fieldState.error]} />
+              )}
+            </Field>
+          )}
+        />
+
+        {/* Submit Button */}
+        <Field orientation="vertical">
+          <Button
+            className="w-full"
+            type="submit"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? "Signing Up..." : "Sign Up"}
+          </Button>
+
+          <FieldDescription className="text-xs text-muted-foreground">
             By continuing, you agree to our{" "}
-            <Link href="/terms-of-service" className="underline underline-offset-4">
+            <Link href="/terms-of-service" className="underline">
               Terms of Service
             </Link>{" "}
             and{" "}
-            <Link href="/privacy-policy" className="underline underline-offset-4">
+            <Link href="/privacy-policy" className="underline">
               Privacy Policy
             </Link>
             .
-          </Label>
-        </div>
+          </FieldDescription>
+        </Field>
 
-        {/* SUBMIT */}
-        <Button type="submit" className="w-full">
-          Sign Up
-        </Button>
+        <FieldSeparator>Or continue with</FieldSeparator>
 
-        <FieldSeparator>Or sign up with</FieldSeparator>
+        {/* Google Sign Up */}
+        <Field>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full flex items-center gap-2"
+          >
+            <GoogleIcon className="h-5 w-5" />
+            Sign Up with Google
+          </Button>
 
-        {/* GOOGLE SIGN-IN */}
-        <Button type="button" variant="outline" className="flex w-full items-center gap-2">
-          <GoogleIcon className="h-5 w-5" />
-          Sign up with Google
-        </Button>
-
-        <FieldDescription className="mt-2 text-center text-sm">
-          Already have an account?{" "}
-          <Link href="/login" className="underline underline-offset-4">
-            Login
-          </Link>
-        </FieldDescription>
+          <FieldDescription className="mt-2 text-center text-sm">
+            Already have an account?{" "}
+            <Link href="/login" className="underline">
+              Log In
+            </Link>
+          </FieldDescription>
+        </Field>
       </FieldGroup>
     </form>
   );
