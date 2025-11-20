@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { ArrowRight } from "lucide-react";
-import { AnimatedThemeToggler } from "@/components/shared/theme/ThemeToggler";
+import { AnimatedThemeToggler } from "@/components/shared/theme/AnimatedThemeToggler";
 
 export default function LandingPlaceholder() {
   return (

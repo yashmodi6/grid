@@ -34,18 +34,23 @@ export async function updateSession(request: NextRequest) {
 
   const user = data?.claims;
 
-  const publicRoutes = ["/", "/pricing", "/about", "/contact", "/blog"];
-  const authRoutes = ["/login", "/signup", "/auth"];
+  const protectedRoutes = ["/dashboard", "/profile", "/settings", "/account"];
+  const authRoutes = ["/login", "/signup", "/auth", "/check-mail"];
 
   const path = request.nextUrl.pathname;
 
-  const isPublic = publicRoutes.some((r) => path === r || path.startsWith(r));
+  const isProtected = protectedRoutes.some((r) => path === r || path.startsWith(r));
   const isAuth = authRoutes.some((r) => path === r || path.startsWith(r));
 
-  if (!user && !isPublic && !isAuth) {
+  if (!user && isProtected) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+  if (user && isAuth) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
