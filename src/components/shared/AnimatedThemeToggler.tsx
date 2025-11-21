@@ -14,7 +14,8 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 
-interface AnimatedThemeTogglerProps extends React.ComponentPropsWithoutRef<"button"> {
+interface AnimatedThemeTogglerProps
+  extends React.ComponentPropsWithoutRef<"button"> {
   duration?: number;
   menuAlign?: "start" | "end" | "center";
 }
@@ -28,10 +29,19 @@ export const AnimatedThemeToggler = ({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const { theme, setTheme } = useTheme();
 
-  // ⭐ Prevent hydration errors
+  /**
+   * Prevent hydration issues:
+   * Using RAF avoids synchronous setState warnings from eslint.
+   */
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
+  /**
+   * Apply animated view-transition theme change
+   */
   const applyTheme = useCallback(
     async (next: "light" | "dark" | "system") => {
       if (!buttonRef.current) return;
@@ -51,7 +61,10 @@ export const AnimatedThemeToggler = ({
 
       document.documentElement.animate(
         {
-          clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${maxRadius}px at ${x}px ${y}px)`],
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${maxRadius}px at ${x}px ${y}px)`,
+          ],
         },
         {
           duration,
@@ -63,10 +76,16 @@ export const AnimatedThemeToggler = ({
     [duration, setTheme]
   );
 
-  // -----------------------------
-  // Safe icon mapping (after mount only!)
-  // -----------------------------
-  const Icon = mounted ? (theme === "light" ? Sun : theme === "dark" ? Moon : Laptop) : Laptop; // Placeholder to avoid SSR mismatch
+  /**
+   * Safe icon (only after mount to avoid SSR mismatch)
+   */
+  const Icon = mounted
+    ? theme === "light"
+      ? Sun
+      : theme === "dark"
+      ? Moon
+      : Laptop
+    : Laptop;
 
   return (
     <DropdownMenu>
@@ -75,20 +94,24 @@ export const AnimatedThemeToggler = ({
           ref={buttonRef}
           className={cn(
             "flex items-center justify-center rounded-md p-2",
-            "border-border/60 bg-background/40 border backdrop-blur-md",
-            "hover:bg-accent hover:text-accent-foreground transition-colors",
-            "duration-150 active:scale-[0.96]",
+            "border border-border/60 bg-background/40 backdrop-blur-md",
+            "hover:bg-accent hover:text-accent-foreground transition-colors duration-150",
+            "active:scale-[0.96]",
             className
           )}
-          {...props}>
+          {...props}
+        >
           <Icon className="h-4 w-4 transition-all duration-300" />
         </button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
         align={menuAlign}
-        className="border-border/40 bg-popover w-40 rounded-lg border shadow-xl">
-        <DropdownMenuLabel className="text-muted-foreground">Theme</DropdownMenuLabel>
+        className="w-40 rounded-lg border border-border/40 bg-popover shadow-xl"
+      >
+        <DropdownMenuLabel className="text-muted-foreground">
+          Theme
+        </DropdownMenuLabel>
 
         <DropdownMenuItem onClick={() => applyTheme("light")}>
           <Sun className="mr-2 h-4 w-4" /> Light

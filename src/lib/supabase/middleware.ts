@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { PROTECTED_ROUTES, AUTH_ROUTES } from "@/lib/routes";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -34,13 +35,10 @@ export async function updateSession(request: NextRequest) {
 
   const user = data?.claims;
 
-  const protectedRoutes = ["/dashboard", "/profile", "/settings", "/account"];
-  const authRoutes = ["/login", "/signup", "/auth", "/check-mail"];
-
   const path = request.nextUrl.pathname;
 
-  const isProtected = protectedRoutes.some((r) => path === r || path.startsWith(r));
-  const isAuth = authRoutes.some((r) => path === r || path.startsWith(r));
+  const isProtected = PROTECTED_ROUTES.some((r) => path === r || path.startsWith(r));
+  const isAuth = AUTH_ROUTES.some((r) => path === r || path.startsWith(r));
 
   if (!user && isProtected) {
     // no user, potentially respond by redirecting the user to the login page

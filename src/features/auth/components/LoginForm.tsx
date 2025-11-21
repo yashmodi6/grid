@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
@@ -20,29 +19,11 @@ import { Spinner } from "@/components/ui/spinner";
 
 import { Eye, EyeOff } from "lucide-react";
 import { GoogleIcon } from "@/components/icons/GoogleIcon";
-import { handleFormNavigation } from "@/features/auth/utils/handleFormNavigation";
-import { useKeyboardStatus } from "@/features/auth/hooks/useKeyboardStatus";
-import { KeyboardStatus } from "@/features/auth/components/KeyboardStatus";
-//
-// -----------------------
-// Validation Schema
-// -----------------------
-const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
-});
 
-type LoginValues = z.infer<typeof loginSchema>;
+import { loginSchema, LoginValues } from "@/features/auth/schemas/loginSchema";
 
-//
-// -----------------------
-// Component
-// -----------------------
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
-
-  const { keyboardInfo, handleKeyboardState, resetKeyboardState } = useKeyboardStatus();
 
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
@@ -54,8 +35,6 @@ export function LoginForm() {
 
   async function onSubmit(values: LoginValues) {
     console.log("Login values:", values);
-
-    // simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 1500));
   }
 
@@ -64,7 +43,7 @@ export function LoginForm() {
       className="flex flex-col gap-6"
       noValidate
       onSubmit={form.handleSubmit(onSubmit)}
-      onKeyDown={(e) => handleFormNavigation(e, () => form.handleSubmit(onSubmit)())}>
+    >
       <FieldGroup>
         {/* Header */}
         <div className="flex flex-col items-center gap-1 text-center">
@@ -102,18 +81,17 @@ export function LoginForm() {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              {/* Label + forgot link */}
               <div className="mb-1 flex items-center">
                 <FieldLabel htmlFor="password">Password</FieldLabel>
 
                 <Link
                   href="/forgot-password"
-                  className="text-muted-foreground ml-auto text-sm underline-offset-4 hover:underline">
+                  className="text-muted-foreground ml-auto text-sm underline-offset-4 hover:underline"
+                >
                   Forgot password?
                 </Link>
               </div>
 
-              {/* Password field with toggle */}
               <div className="relative">
                 <Input
                   {...field}
@@ -122,14 +100,6 @@ export function LoginForm() {
                   placeholder="••••••••"
                   aria-invalid={fieldState.invalid}
                   className="pr-10"
-                  onFocus={() => setIsPasswordFocused(true)}
-                  onBlur={() => {
-                    setIsPasswordFocused(false);
-                    resetKeyboardState();
-                    field.onBlur();
-                  }}
-                  onKeyDown={handleKeyboardState}
-                  onKeyUp={handleKeyboardState}
                 />
 
                 <Button
@@ -137,19 +107,12 @@ export function LoginForm() {
                   variant="ghost"
                   size="icon"
                   className="text-muted-foreground absolute inset-y-0 right-0 hover:bg-transparent"
-                  onClick={() => setShowPassword((prev) => !prev)}>
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
 
-              {/* Keyboard status */}
-              <KeyboardStatus
-                focused={isPasswordFocused}
-                caps={keyboardInfo.caps}
-                num={keyboardInfo.num}
-              />
-
-              {/* Validation errors */}
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -160,7 +123,8 @@ export function LoginForm() {
           <Button
             type="submit"
             className="flex w-full items-center justify-center gap-2"
-            disabled={form.formState.isSubmitting}>
+            disabled={form.formState.isSubmitting}
+          >
             {form.formState.isSubmitting && <Spinner className="h-4 w-4" />}
             {form.formState.isSubmitting ? "Logging in..." : "Login"}
           </Button>
