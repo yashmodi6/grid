@@ -1,0 +1,41 @@
+# dependencies
+node_modules
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# next build output
+.next
+out
+
+# build output
+build
+dist
+
+# static output
+public/build
+public/static
+
+# system files
+.DS_Store
+
+# environment
+.env
+.env.*
+!.env.example
+
+# generated types
+*.d.ts
+
+# compiled JS from TS
+**/*.js.map
+**/*.tsbuildinfo
+
+# testing
+coverage
+
+# logs
+*.log
+
+# vscode settings
+.vscode
