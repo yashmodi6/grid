@@ -1,22 +1,28 @@
-import { Button } from "@/components/ui/button"
+import Link from "next/link";
+import {Button} from "@/components/ui/button";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background text-foreground">
-      <div className="flex flex-col items-center gap-6 px-6 py-12 text-center">
-        <h1 className="text-4xl font-semibold tracking-tight">
-          Welcome to <span className="text-primary">Grid</span>
-        </h1>
-
-        <p className="max-w-xl text-lg text-muted-foreground">
-          Your personal productivity and learning workspace.
-          The journey starts right here—today is a great day to build something meaningful.
+    <div className="from-background via-background/40 to-background/10 flex min-h-svh flex-col items-center justify-center bg-gradient-to-b px-6 py-16">
+      {/* Logo + Name */}
+      <div className="mb-12 flex flex-col items-center gap-2">
+        <h1 className="text-4xl font-bold tracking-tight">Grid</h1>
+        <p className="text-muted-foreground max-w-sm text-center text-sm">
+          A simple and structured way to plan chapters, set goals, track study sessions, and build
+          smarter habits — all in one place.
         </p>
+      </div>
 
-        <Button className="mt-4" size="lg">
-          Let’s get started
+      {/* Buttons */}
+      <div className="flex flex-col gap-4 sm:flex-row">
+        <Button asChild className="px-10 py-5 text-base">
+          <Link href="/login">Login</Link>
+        </Button>
+
+        <Button asChild variant="outline" className="px-10 py-5 text-base">
+          <Link href="/signup">Sign Up</Link>
         </Button>
       </div>
-    </main>
-  )
+    </div>
+  );
 }

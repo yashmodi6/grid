@@ -1,6 +1,7 @@
 import type {Metadata} from "next";
 import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
+import {Toaster} from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Grid",
   description:
-    "Grid is a productivity and learning platform designed to help you organize tasks, study, track progress, and achieve your goals efficiently."
+    "Grid is a productivity and learning platform designed to help you organize tasks, study, track progress, and achieve your goals efficiently.",
 };
 export default function RootLayout({
   children,
@@ -24,7 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }
