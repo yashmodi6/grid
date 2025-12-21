@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Grid SaaS
 
-## Getting Started
+Grid SaaS is a **hobby project** built around my own productivity needs and aimed at **helping students stay organized, focused, and productive**. It follows a phased development approach with an emphasis on clean code, good UX/UI, and long-term scalability.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 📅 Timeline
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Version 1 (v1) Target:** **March 2026**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧭 Roadmap
 
-## Learn More
+<details>
+<summary><strong>Phase 1 – Authentication & Dashboard</strong></summary>
 
-To learn more about Next.js, take a look at the following resources:
+- [x] Login
+- [x] Signup
+- [x] Email verification
+- [x] Forgot password
+- [x] Update password
+- [ ] Update user details
+- [x] Sign out
+- [ ] Delete account
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+</details>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+<details>
+<summary><strong>Phase 2 – Core Productivity Features</strong></summary>
 
-## Deploy on Vercel
+- [ ] Todos
+- [ ] Timers
+- [ ] Dashboard feature enhancements
+- [ ] Basic analytics / progress tracking
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+</details>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<details>
+<summary><strong>Phase 3 – Refinement & Experience</strong></summary>
+
+- [ ] Code refactoring
+- [ ] Improve documentation & readability
+- [ ] Better implementation patterns
+- [ ] UX improvements
+- [ ] UI enhancements
+- [ ] Performance optimizations
+- [ ] Security enhancements
+
+</details>
+
+Further phases will be released after completion of these phases.
+
+---
+
+## 🛠 Tech Stack
+
+- Next.js, Tailwind CSS, Shadcn UI
+- Database: PostgreSQL
+- Auth & Emails: BetterAuth, Nodemailer
+
+---
+
+## 🎯 Goals
+
+- Improve personal productivity
+- Help students manage tasks and time effectively
+- Learn and apply scalable SaaS architecture
+- Maintain clean, readable, and well-documented code
+- Learn to stay focused on a long-term project (this one is **not** going to the trash can 😄)
+
+---
+
+## 🤝 Contributing
+
+This is primarily a personal hobby project, but contributions, ideas, and suggestions are welcome.
+
+- Open an issue for bugs or feature requests
+- Discuss major changes before submitting a pull request
+- Keep code clean, readable, and well-documented
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.  
+See the full license here: [LICENSE.md](./LICENSE.md)
+
+---
+
+## 📌 Status
+
+🚧 Actively developed as a long-term hobby project.
+
+---
+
+Built with ❤️ for students, learning, and self-improvement.
