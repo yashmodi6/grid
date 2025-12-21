@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import {useRouter} from "next/navigation";
+import {useState} from "react";
 
 import {authClient} from "@/lib/auth-client";
 import {useForm, Controller} from "react-hook-form";
@@ -21,13 +22,14 @@ import {
 import {Input} from "@/components/ui/input";
 import {PasswordInput} from "./password-input";
 import {GoogleOAuthButton} from "./google-oauth-button";
-
+import {VerifyEmailDialog} from "./verify-email-dialog";
 import {Checkbox} from "@/components/ui/checkbox";
 import {LoadingSwap} from "@/components/ui/loading-swap";
 
 export function SignUpForm() {
   const router = useRouter();
-
+  const [open, setOpen] = useState(false);
+  const [verifyEmail, setVerifyEmail] = useState<string | null>(null);
   const form = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -47,134 +49,140 @@ export function SignUpForm() {
         email,
         password,
         name,
-        callbackURL: "/",
+        callbackURL: "/dashboard",
       },
       {
         onError: (error) => {
           toast.error(error.error.message || "Failed To Sign Up");
         },
         onSuccess: () => {
-          toast.success("Successfully Signed Up");
-          router.push("/dashboard");
+          toast.success("Please Verify Your Email");
+          setVerifyEmail(email);
+          setOpen(true);
         },
       }
     );
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
-      <FieldGroup disabled={isSubmitting}>
-        {/* Header */}
-        <div className="flex flex-col items-center gap-1 text-center">
-          <h1 className="text-2xl font-bold">Create your account</h1>
-          <p className="text-muted-foreground text-sm text-balance">
-            Enter your details below to create your account
-          </p>
-        </div>
+    <>
+      {open && verifyEmail && (
+        <VerifyEmailDialog open={open} onOpenChange={setOpen} email={verifyEmail ?? ""} />
+      )}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6" noValidate>
+        <FieldGroup disabled={isSubmitting}>
+          {/* Header */}
+          <div className="flex flex-col items-center gap-1 text-center">
+            <h1 className="text-2xl font-bold">Create your account</h1>
+            <p className="text-muted-foreground text-sm text-balance">
+              Enter your details below to create your account
+            </p>
+          </div>
 
-        {/* Email */}
-        <Controller
-          name="email"
-          control={form.control}
-          render={({field, fieldState}) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+          {/* Email */}
+          <Controller
+            name="email"
+            control={form.control}
+            render={({field, fieldState}) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
 
-              <Input
-                {...field}
-                id={field.name}
-                placeholder="m@example.com"
-                type="email"
-                aria-invalid={fieldState.invalid}
-                disabled={isSubmitting}
-              />
-
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-
-        {/* Password */}
-        <Controller
-          name="password"
-          control={form.control}
-          render={({field, fieldState}) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-
-              <PasswordInput
-                {...field}
-                id={field.name}
-                aria-invalid={fieldState.invalid}
-                disabled={isSubmitting}
-              />
-
-              <FieldDescription className="text-xs">
-                Password must be at least 8 characters long.
-              </FieldDescription>
-
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-
-        {/* Terms */}
-        <Controller
-          name="terms"
-          control={form.control}
-          render={({field, fieldState}) => (
-            <Field data-invalid={fieldState.invalid}>
-              <div className="flex items-start gap-3">
-                <Checkbox
-                  id="terms"
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
+                <Input
+                  {...field}
+                  id={field.name}
+                  placeholder="m@example.com"
+                  type="email"
                   aria-invalid={fieldState.invalid}
                   disabled={isSubmitting}
                 />
 
-                <label htmlFor="terms" className="text-muted-foreground text-xs leading-tight">
-                  I agree to the{" "}
-                  <Link href="#" className="underline underline-offset-4">
-                    Terms & Conditions
-                  </Link>{" "}
-                  and{" "}
-                  <Link href="#" className="underline underline-offset-4">
-                    Privacy Policy
-                  </Link>
-                  .
-                </label>
-              </div>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
 
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
+          {/* Password */}
+          <Controller
+            name="password"
+            control={form.control}
+            render={({field, fieldState}) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Password</FieldLabel>
 
-        {/* Signup Button with LoadingSwap */}
-        <Field>
-          <Button type="submit" className="relative w-full" disabled={isSubmitting}>
-            <LoadingSwap isLoading={isSubmitting} className="flex justify-center">
-              Create Account
-            </LoadingSwap>
-          </Button>
-        </Field>
+                <PasswordInput
+                  {...field}
+                  id={field.name}
+                  aria-invalid={fieldState.invalid}
+                  disabled={isSubmitting}
+                />
 
-        {/* Divider */}
-        <FieldSeparator>Or continue with</FieldSeparator>
+               {!fieldState.invalid && <FieldDescription className="text-xs">
+                  At least 8 characters, with uppercase, lowercase, number, and symbol.
+                </FieldDescription>}
 
-        {/* Google Signup */}
-        <Field>
-          <GoogleOAuthButton disabled={isSubmitting} />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
 
-          <FieldDescription className="mt-2 text-center">
-            Already have an account?{" "}
-            <Link href="/" className="underline underline-offset-4">
-              Login
-            </Link>
-          </FieldDescription>
-        </Field>
-      </FieldGroup>
-    </form>
+          {/* Terms */}
+          <Controller
+            name="terms"
+            control={form.control}
+            render={({field, fieldState}) => (
+              <Field data-invalid={fieldState.invalid}>
+                <div className="flex items-start gap-3">
+                  <Checkbox
+                    id="terms"
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    aria-invalid={fieldState.invalid}
+                    disabled={isSubmitting}
+                  />
+
+                  <label htmlFor="terms" className="text-muted-foreground text-xs leading-tight">
+                    I agree to the{" "}
+                    <Link href="#" className="underline underline-offset-4">
+                      Terms & Conditions
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="#" className="underline underline-offset-4">
+                      Privacy Policy
+                    </Link>
+                    .
+                  </label>
+                </div>
+
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+
+          {/* Signup Button with LoadingSwap */}
+          <Field>
+            <Button type="submit" className="relative w-full" disabled={isSubmitting}>
+              <LoadingSwap isLoading={isSubmitting} className="flex justify-center">
+                Create Account
+              </LoadingSwap>
+            </Button>
+          </Field>
+
+          {/* Divider */}
+          <FieldSeparator>Or continue with</FieldSeparator>
+
+          {/* Google Signup */}
+          <Field>
+            <GoogleOAuthButton disabled={isSubmitting} />
+
+            <FieldDescription className="mt-2 text-center">
+              Already have an account?{" "}
+              <Link href="/" className="underline underline-offset-4">
+                Login
+              </Link>
+            </FieldDescription>
+          </Field>
+        </FieldGroup>
+      </form>
+    </>
   );
 }

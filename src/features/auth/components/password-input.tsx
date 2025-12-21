@@ -9,11 +9,16 @@ import {
 } from "@/components/ui/input-group";
 import {Eye, EyeOff} from "lucide-react";
 
+type PasswordInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  showToggle?: boolean;
+};
+
 export function PasswordInput({
   id,
   placeholder = "••••••••",
+  showToggle = true,
   ...rest
-}: React.InputHTMLAttributes<HTMLInputElement>) {
+}: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -25,15 +30,22 @@ export function PasswordInput({
         {...rest}
       />
 
-      <InputGroupAddon align="inline-end">
-        <InputGroupButton
-          size="icon-xs"
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          aria-label="Toggle password visibility">
-          {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-        </InputGroupButton>
-      </InputGroupAddon>
+      {showToggle && (
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton
+            size="icon-xs"
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            aria-label="Toggle password visibility"
+          >
+            {showPassword ? (
+              <EyeOff className="size-4" />
+            ) : (
+              <Eye className="size-4" />
+            )}
+          </InputGroupButton>
+        </InputGroupAddon>
+      )}
     </InputGroup>
   );
 }

@@ -1,4 +1,3 @@
-// src/lib/auth-utils.ts
 import {auth} from "@/lib/auth";
 import {headers} from "next/headers";
 import {redirect} from "next/navigation";
@@ -8,15 +7,15 @@ import {redirect} from "next/navigation";
  * Redirects to /login if not authenticated.
  */
 export const requireAuth = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
 
-  if (!session) {
-    redirect("/login");
-  }
+    if (!session) {
+        redirect("/login");
+    }
 
-  return session; // safe to use
+    return session; 
 };
 
 /**
@@ -24,13 +23,13 @@ export const requireAuth = async () => {
  * Redirects to /dashboard if authenticated.
  */
 export const requireUnAuth = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
 
-  if (session) {
-    redirect("/dashboard");
-  }
+    if (session) {
+        redirect("/dashboard");
+    }
 
-  return null;
+    return null;
 };
