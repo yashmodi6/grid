@@ -1,13 +1,13 @@
 import {sendEmail} from "@/lib/emails/send-email";
 
 type User = {
-    email: string;
-    name: string;
+  email: string;
+  name: string;
 };
 
 type VerifyEmailParams = {
-    user: User;
-    url: string;
+  user: User;
+  url: string;
 };
 
 const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL;
@@ -166,10 +166,10 @@ const VERIFY_EMAIL_HTML = (user: User, url: string) => `
 `;
 
 export async function sendEmailVerificationEmail({user, url}: VerifyEmailParams) {
-    return sendEmail({
-        to: user.email,
-        subject: "Verify your email | GRID",
-        html: VERIFY_EMAIL_HTML(user, url),
-        text: `Hi ${user.name}, verify your email for GRID by visiting: ${url}`
-    });
+  return sendEmail({
+    to: user.email,
+    subject: "Verify your email | GRID",
+    html: VERIFY_EMAIL_HTML(user, url),
+    text: `Hi ${user.name}, verify your email for GRID by visiting: ${url}`,
+  });
 }

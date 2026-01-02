@@ -6,42 +6,42 @@ import {sendEmailVerificationEmail} from "./emails/auth/email-verification";
 import {sendResetPasswordEmail} from "./emails/auth/reset-password";
 
 export const auth = betterAuth({
-    account: {
-        accountLinking: {
-            enabled: true
-        }
+  account: {
+    accountLinking: {
+      enabled: true,
     },
-    emailAndPassword: {
-        enabled: true,
-        requireEmailVerification: true,
-        sendResetPassword: async ({user, url}) => {
-            await sendResetPasswordEmail({user, url});
-        }
+  },
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: true,
+    sendResetPassword: async ({user, url}) => {
+      await sendResetPasswordEmail({user, url});
     },
-    emailVerification: {
-        autoSignInAfterVerification: true,
-        expiresIn: 60 * 60 * 24, //24 hours
-        sendOnSignUp: true,
-        sendVerificationEmail: async ({user, url}) => {
-            await sendEmailVerificationEmail({user, url});
-        }
+  },
+  emailVerification: {
+    autoSignInAfterVerification: true,
+    expiresIn: 60 * 60 * 24, //24 hours
+    sendOnSignUp: true,
+    sendVerificationEmail: async ({user, url}) => {
+      await sendEmailVerificationEmail({user, url});
     },
-    socialProviders: {
-        google: {
-            prompt: "select_account",
-            clientId: process.env.GOOGLE_CLIENT_ID as string,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
-        }
+  },
+  socialProviders: {
+    google: {
+      prompt: "select_account",
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
+  },
 
-    session: {
-        cookieCache: {
-            enabled: true,
-            maxAge: 60 * 5 // 5 minutes
-        }
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 60 * 5, // 5 minutes
     },
-    plugins: [nextCookies()],
-    database: drizzleAdapter(db, {
-        provider: "pg"
-    })
+  },
+  plugins: [nextCookies()],
+  database: drizzleAdapter(db, {
+    provider: "pg",
+  }),
 });

@@ -9,18 +9,18 @@ import {sendEmail} from "@/lib/emails/send-email";
 //     continent: string | null;
 // };
 
-                // <p style="font-size: 14px; color: #64748b;">
-                //     For security, this request was received from a <strong>${meta.operatingSystem}</strong> device using <strong>${meta.browserName}</strong> loacted at <strong>${meta.city}, ${meta.country}, ${meta.continent}</strong>.
-                // </p>
+// <p style="font-size: 14px; color: #64748b;">
+//     For security, this request was received from a <strong>${meta.operatingSystem}</strong> device using <strong>${meta.browserName}</strong> loacted at <strong>${meta.city}, ${meta.country}, ${meta.continent}</strong>.
+// </p>
 
 type User = {
-    email: string;
-    name: string;
+  email: string;
+  name: string;
 };
 
 type ResetPasswordEmailParams = {
-    user: User;
-    url: string;
+  user: User;
+  url: string;
 };
 
 const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL;
@@ -166,10 +166,10 @@ const RESET_PASSWORD_EMAIL = (user: User, url: string) => `
 `;
 
 export async function sendResetPasswordEmail({user, url}: ResetPasswordEmailParams) {
-    return sendEmail({
-        to: user.email,
-        subject: "Reset Your Password| GRID",
-        html: RESET_PASSWORD_EMAIL(user, url),
-        text: `Hi ${user.name}, reset your password for GRID by visiting: ${url}`
-    });
+  return sendEmail({
+    to: user.email,
+    subject: "Reset Your Password| GRID",
+    html: RESET_PASSWORD_EMAIL(user, url),
+    text: `Hi ${user.name}, reset your password for GRID by visiting: ${url}`,
+  });
 }

@@ -36,13 +36,8 @@ export function PasswordInput({
             size="icon-xs"
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            aria-label="Toggle password visibility"
-          >
-            {showPassword ? (
-              <EyeOff className="size-4" />
-            ) : (
-              <Eye className="size-4" />
-            )}
+            aria-label="Toggle password visibility">
+            {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
           </InputGroupButton>
         </InputGroupAddon>
       )}

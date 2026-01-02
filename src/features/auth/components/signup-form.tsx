@@ -116,9 +116,11 @@ export function SignUpForm() {
                   disabled={isSubmitting}
                 />
 
-               {!fieldState.invalid && <FieldDescription className="text-xs">
-                  At least 8 characters, with uppercase, lowercase, number, and symbol.
-                </FieldDescription>}
+                {!fieldState.invalid && (
+                  <FieldDescription className="text-xs">
+                    At least 8 characters, with uppercase, lowercase, number, and symbol.
+                  </FieldDescription>
+                )}
 
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
