@@ -8,9 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import {Button} from "@/components/ui/button";
-import {authClient} from "@/lib/auth-client";
+} from "@/shared/ui/dialog";
+import {Button} from "@/shared/ui/button";
+import {authClient} from "@/shared/lib/auth/auth-client";
 
 type VerifyEmailDialogProps = {
   open: boolean;

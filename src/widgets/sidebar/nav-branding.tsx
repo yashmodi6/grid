@@ -2,7 +2,7 @@
 
 import {GalleryVerticalEnd} from "lucide-react";
 
-import {SidebarMenu, SidebarMenuButton, SidebarMenuItem} from "@/components/ui/sidebar";
+import {SidebarMenu, SidebarMenuButton, SidebarMenuItem} from "@/shared/ui/sidebar";
 
 export function Branding() {
   return (

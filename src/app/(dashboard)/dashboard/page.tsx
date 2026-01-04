@@ -1,4 +1,4 @@
-import {requireAuth} from "@/lib/auth-utils";
+import { requireAuth } from "@/shared/lib/auth/auth-utils";
 
 export default async function Page() {
   await requireAuth();

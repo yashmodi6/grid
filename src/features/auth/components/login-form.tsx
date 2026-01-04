@@ -8,11 +8,11 @@ import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 
 import {loginSchema, type LoginValues} from "../schemas/loginSchema";
-import {authClient} from "@/lib/auth-client";
+import {authClient} from "@/shared/lib/auth/auth-client";
 
 import {toast} from "sonner";
 import {VerifyEmailDialog} from "./verify-email-dialog";
-import {Button} from "@/components/ui/button";
+import {Button} from "@/shared/ui/button";
 import {
   Field,
   FieldDescription,
@@ -20,12 +20,12 @@ import {
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@/components/ui/field";
-import {Input} from "@/components/ui/input";
+} from "@/shared/ui/field";
+import {Input} from "@/shared/ui/input";
 
 import {PasswordInput} from "./password-input";
 import {GoogleOAuthButton} from "./google-oauth-button";
-import {LoadingSwap} from "@/components/ui/loading-swap";
+import {LoadingSwap} from "@/shared/ui/loading-swap";
 
 export function LoginForm() {
   const router = useRouter();

@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import {Button} from "@/components/ui/button";
-import {authClient} from "@/lib/auth-client";
+import {Button} from "@/shared/ui/button";
+import {authClient} from "@/shared/lib/auth/auth-client";
 
 export function GoogleOAuthButton() {
   async function handleGoogleSignIn() {

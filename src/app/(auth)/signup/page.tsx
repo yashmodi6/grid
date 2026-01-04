@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {GalleryVerticalEnd} from "lucide-react";
 import {SignUpForm} from "@/features/auth";
-import {requireUnAuth} from "@/lib/auth-utils";
+import {requireUnAuth} from "@/shared/lib/auth/auth-utils";
 
 export default async function LoginPage() {
   await requireUnAuth();

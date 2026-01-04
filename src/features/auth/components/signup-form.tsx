@@ -4,12 +4,12 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {useState} from "react";
 
-import {authClient} from "@/lib/auth-client";
+import {authClient} from "@/shared/lib/auth/auth-client";
 import {useForm, Controller} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {signUpSchema, type SignUpValues} from "../schemas/signUpSchema";
 
-import {Button} from "@/components/ui/button";
+import {Button} from "@/shared/ui/button";
 import {toast} from "sonner";
 import {
   Field,
@@ -18,13 +18,13 @@ import {
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@/components/ui/field";
-import {Input} from "@/components/ui/input";
+} from "@/shared/ui/field";
+import {Input} from "@/shared/ui/input";
 import {PasswordInput} from "./password-input";
 import {GoogleOAuthButton} from "./google-oauth-button";
 import {VerifyEmailDialog} from "./verify-email-dialog";
-import {Checkbox} from "@/components/ui/checkbox";
-import {LoadingSwap} from "@/components/ui/loading-swap";
+import {Checkbox} from "@/shared/ui/checkbox";
+import {LoadingSwap} from "@/shared/ui/loading-swap";
 
 export function SignUpForm() {
   const router = useRouter();

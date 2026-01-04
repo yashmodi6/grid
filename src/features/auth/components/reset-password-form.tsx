@@ -7,13 +7,13 @@ import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 
 import {resetPasswordSchema, type ResetPasswordValues} from "../schemas/resetPasswordSchema";
-import {authClient} from "@/lib/auth-client";
+import {authClient} from "@/shared/lib/auth/auth-client";
 
 import {toast} from "sonner";
-import {Button} from "@/components/ui/button";
-import {Field, FieldError, FieldGroup, FieldLabel} from "@/components/ui/field";
+import {Button} from "@/shared/ui/button";
+import {Field, FieldError, FieldGroup, FieldLabel} from "@/shared/ui/field";
 import {PasswordInput} from "./password-input";
-import {LoadingSwap} from "@/components/ui/loading-swap";
+import {LoadingSwap} from "@/shared/ui/loading-swap";
 
 export function ResetPasswordForm() {
   const router = useRouter();

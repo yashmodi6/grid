@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {GalleryVerticalEnd} from "lucide-react";
-import {requireUnAuth} from "@/lib/auth-utils";
+import {requireUnAuth} from "@/shared/lib/auth/auth-utils";
 
 import {LoginForm} from "@/features/auth/components/login-form";
 

@@ -6,7 +6,7 @@ import {
   InputGroupInput,
   InputGroupAddon,
   InputGroupButton,
-} from "@/components/ui/input-group";
+} from "@/shared/ui/input-group";
 import {Eye, EyeOff} from "lucide-react";
 
 type PasswordInputProps = React.InputHTMLAttributes<HTMLInputElement> & {

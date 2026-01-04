@@ -1,5 +1,3 @@
-"use client";
-
 import {Home, CheckSquare, Calendar, Timer, HelpCircle, Settings} from "lucide-react";
 
 import {
@@ -13,7 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
+} from "@/shared/ui/sidebar";
 
 import {Branding} from "./nav-branding";
 import {NavUser} from "./nav-user";

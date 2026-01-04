@@ -1,24 +1,23 @@
 "use client";
 
-import {useRouter} from "next/navigation";
 import Link from "next/link";
 
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 
-import {authClient} from "@/lib/auth-client";
+import {authClient} from "@/shared/lib/auth/auth-client";
 import {toast} from "sonner";
 
-import {Button} from "@/components/ui/button";
-import {Field, FieldError, FieldGroup, FieldLabel} from "@/components/ui/field";
-import {Input} from "@/components/ui/input";
-import {LoadingSwap} from "@/components/ui/loading-swap";
+import {Button} from "@/shared/ui/button";
+import {Field, FieldError, FieldGroup, FieldLabel} from "@/shared/ui/field";
+import {Input} from "@/shared/ui/input";
+import {LoadingSwap} from "@/shared/ui/loading-swap";
 
 /* ---------------- Schema ---------------- */
 
 const forgotPasswordSchema = z.object({
-  email: z.string().email("Enter a valid email address"),
+  email: z.email("Enter a valid email address"),
 });
 
 type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
@@ -26,8 +25,6 @@ type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
 /* ---------------- Component ---------------- */
 
 export function ForgotPasswordForm() {
-  const router = useRouter();
-
   const form = useForm<ForgotPasswordValues>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
