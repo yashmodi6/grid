@@ -12,7 +12,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "postinstall" : "node scripts/install-os-deps.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -88,7 +89,6 @@
     "eslint-config-next": "16.0.8",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
-    "lightningcss.android-arm64.node": "^1.29.3-1",
     "prettier": "3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
