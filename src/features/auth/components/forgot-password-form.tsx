@@ -2,17 +2,17 @@
 
 import Link from "next/link";
 
-import {Controller, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {z} from "zod";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
-import {authClient} from "@/shared/lib/auth/auth-client";
-import {toast} from "sonner";
+import { authClient } from "@/shared/lib/auth/auth-client";
+import { toast } from "sonner";
 
-import {Button} from "@/shared/ui/button";
-import {Field, FieldError, FieldGroup, FieldLabel} from "@/shared/ui/field";
-import {Input} from "@/shared/ui/input";
-import {LoadingSwap} from "@/shared/ui/loading-swap";
+import { Button } from "@/shared/ui/button";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/ui/field";
+import { Input } from "@/shared/ui/input";
+import { LoadingSwap } from "@/shared/ui/loading-swap";
 
 /* ---------------- Schema ---------------- */
 
@@ -32,9 +32,9 @@ export function ForgotPasswordForm() {
     },
   });
 
-  const {isSubmitting} = form.formState;
+  const { isSubmitting } = form.formState;
 
-  async function onSubmit({email}: ForgotPasswordValues) {
+  async function onSubmit({ email }: ForgotPasswordValues) {
     await authClient.requestPasswordReset(
       {
         email,
@@ -53,7 +53,7 @@ export function ForgotPasswordForm() {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6" noValidate>
-      <FieldGroup disabled={isSubmitting}>
+      <FieldGroup>
         {/* Header */}
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Forgot password</h1>
@@ -66,7 +66,7 @@ export function ForgotPasswordForm() {
         <Controller
           name="email"
           control={form.control}
-          render={({field, fieldState}) => (
+          render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor={field.name}>Email</FieldLabel>
 

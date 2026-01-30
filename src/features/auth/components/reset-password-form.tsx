@@ -1,19 +1,19 @@
 "use client";
 
-import {useRouter} from "next/navigation";
-import {useSearchParams} from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
-import {Controller, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import {resetPasswordSchema, type ResetPasswordValues} from "../schemas/resetPasswordSchema";
-import {authClient} from "@/shared/lib/auth/auth-client";
+import { resetPasswordSchema, type ResetPasswordValues } from "../schemas/reset-password-schema";
+import { authClient } from "@/shared/lib/auth/auth-client";
 
-import {toast} from "sonner";
-import {Button} from "@/shared/ui/button";
-import {Field, FieldError, FieldGroup, FieldLabel} from "@/shared/ui/field";
-import {PasswordInput} from "./password-input";
-import {LoadingSwap} from "@/shared/ui/loading-swap";
+import { toast } from "sonner";
+import { Button } from "@/shared/ui/button";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/ui/field";
+import { PasswordInput } from "./password-input";
+import { LoadingSwap } from "@/shared/ui/loading-swap";
 
 export function ResetPasswordForm() {
   const router = useRouter();
@@ -28,13 +28,13 @@ export function ResetPasswordForm() {
     },
   });
 
-  const {isSubmitting} = form.formState;
+  const { isSubmitting } = form.formState;
 
-  async function onSubmit({password}: ResetPasswordValues) {
+  async function onSubmit({ password }: ResetPasswordValues) {
     await authClient.resetPassword(
       {
         newPassword: password,
-        token,
+        token: token ?? undefined,
       },
       {
         onError: (error) => {
@@ -59,7 +59,7 @@ export function ResetPasswordForm() {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6" noValidate>
-      <FieldGroup disabled={isSubmitting}>
+      <FieldGroup>
         {/* Header */}
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Reset your password</h1>
@@ -70,7 +70,7 @@ export function ResetPasswordForm() {
         <Controller
           name="password"
           control={form.control}
-          render={({field, fieldState}) => (
+          render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor={field.name}>New password</FieldLabel>
 
@@ -91,7 +91,7 @@ export function ResetPasswordForm() {
         <Controller
           name="confirmPassword"
           control={form.control}
-          render={({field, fieldState}) => (
+          render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor={field.name}>Confirm password</FieldLabel>
 

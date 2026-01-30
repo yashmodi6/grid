@@ -1,9 +1,9 @@
-import {betterAuth} from "better-auth";
-import {drizzleAdapter} from "better-auth/adapters/drizzle";
-import {db} from "@/drizzle/db";
-import {nextCookies} from "better-auth/next-js";
-import {sendEmailVerificationEmail} from "@/shared/lib//emails/auth/email-verification";
-import {sendResetPasswordEmail} from "@/shared/lib/emails/auth/reset-password";
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { db } from "@/shared/db/db";
+import { nextCookies } from "better-auth/next-js";
+import { sendEmailVerificationEmail } from "@/shared/lib//emails/auth/email-verification";
+import { sendResetPasswordEmail } from "@/shared/lib/emails/auth/reset-password";
 
 export const auth = betterAuth({
   account: {
@@ -14,16 +14,16 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
-    sendResetPassword: async ({user, url}) => {
-      await sendResetPasswordEmail({user, url});
+    sendResetPassword: async ({ user, url }) => {
+      await sendResetPasswordEmail({ user, url });
     },
   },
   emailVerification: {
     autoSignInAfterVerification: true,
     expiresIn: 60 * 60 * 24, //24 hours
     sendOnSignUp: true,
-    sendVerificationEmail: async ({user, url}) => {
-      await sendEmailVerificationEmail({user, url});
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendEmailVerificationEmail({ user, url });
     },
   },
   socialProviders: {
