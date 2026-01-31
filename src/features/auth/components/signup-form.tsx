@@ -1,16 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import {useRouter} from "next/navigation";
-import {useState} from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-import {authClient} from "@/shared/lib/auth/auth-client";
-import {useForm, Controller} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {signUpSchema, type SignUpValues} from "../schemas/signUpSchema";
+import { authClient } from "@/shared/lib/auth/auth-client";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signUpSchema, type SignUpValues } from "../schemas/signUpSchema";
 
-import {Button} from "@/shared/ui/button";
-import {toast} from "sonner";
+import { Button } from "@/shared/ui/button";
+import { toast } from "sonner";
 import {
   Field,
   FieldDescription,
@@ -19,12 +19,12 @@ import {
   FieldLabel,
   FieldSeparator,
 } from "@/shared/ui/field";
-import {Input} from "@/shared/ui/input";
-import {PasswordInput} from "./password-input";
-import {GoogleOAuthButton} from "./google-oauth-button";
-import {VerifyEmailDialog} from "./verify-email-dialog";
-import {Checkbox} from "@/shared/ui/checkbox";
-import {LoadingSwap} from "@/shared/ui/loading-swap";
+import { Input } from "@/shared/ui/input";
+import { PasswordInput } from "./password-input";
+import { GoogleOAuthButton } from "./google-oauth-button";
+import { VerifyEmailDialog } from "./verify-email-dialog";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { LoadingSwap } from "@/shared/ui/loading-swap";
 
 export function SignUpForm() {
   const router = useRouter();
@@ -39,9 +39,9 @@ export function SignUpForm() {
     },
   });
 
-  const {isSubmitting} = form.formState;
+  const { isSubmitting } = form.formState;
 
-  async function onSubmit({email, password}: SignUpValues) {
+  async function onSubmit({ email, password }: SignUpValues) {
     const name = email.split("@")[0];
 
     await authClient.signUp.email(
@@ -70,7 +70,7 @@ export function SignUpForm() {
         <VerifyEmailDialog open={open} onOpenChange={setOpen} email={verifyEmail ?? ""} />
       )}
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6" noValidate>
-        <FieldGroup disabled={isSubmitting}>
+        <FieldGroup>
           {/* Header */}
           <div className="flex flex-col items-center gap-1 text-center">
             <h1 className="text-2xl font-bold">Create your account</h1>
@@ -83,7 +83,7 @@ export function SignUpForm() {
           <Controller
             name="email"
             control={form.control}
-            render={({field, fieldState}) => (
+            render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Email</FieldLabel>
 
@@ -105,7 +105,7 @@ export function SignUpForm() {
           <Controller
             name="password"
             control={form.control}
-            render={({field, fieldState}) => (
+            render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Password</FieldLabel>
 
@@ -131,7 +131,7 @@ export function SignUpForm() {
           <Controller
             name="terms"
             control={form.control}
-            render={({field, fieldState}) => (
+            render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <div className="flex items-start gap-3">
                   <Checkbox

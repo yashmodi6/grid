@@ -1,18 +1,18 @@
 "use client";
 
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {useState} from "react";
+import { useState } from "react";
 
-import {Controller, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import {loginSchema, type LoginValues} from "../schemas/loginSchema";
-import {authClient} from "@/shared/lib/auth/auth-client";
+import { loginSchema, type LoginValues } from "../schemas/loginSchema";
+import { authClient } from "@/shared/lib/auth/auth-client";
 
-import {toast} from "sonner";
-import {VerifyEmailDialog} from "./verify-email-dialog";
-import {Button} from "@/shared/ui/button";
+import { toast } from "sonner";
+import { VerifyEmailDialog } from "./verify-email-dialog";
+import { Button } from "@/shared/ui/button";
 import {
   Field,
   FieldDescription,
@@ -21,11 +21,11 @@ import {
   FieldLabel,
   FieldSeparator,
 } from "@/shared/ui/field";
-import {Input} from "@/shared/ui/input";
+import { Input } from "@/shared/ui/input";
 
-import {PasswordInput} from "./password-input";
-import {GoogleOAuthButton} from "./google-oauth-button";
-import {LoadingSwap} from "@/shared/ui/loading-swap";
+import { PasswordInput } from "./password-input";
+import { GoogleOAuthButton } from "./google-oauth-button";
+import { LoadingSwap } from "@/shared/ui/loading-swap";
 
 export function LoginForm() {
   const router = useRouter();
@@ -39,9 +39,9 @@ export function LoginForm() {
     },
   });
 
-  const {isSubmitting} = form.formState;
+  const { isSubmitting } = form.formState;
 
-  async function onSubmit({email, password}: LoginValues) {
+  async function onSubmit({ email, password }: LoginValues) {
     await authClient.signIn.email(
       {
         email,
@@ -75,7 +75,7 @@ export function LoginForm() {
         <VerifyEmailDialog open={open} onOpenChange={setOpen} email={verifyEmail ?? ""} />
       )}
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6" noValidate>
-        <FieldGroup disabled={isSubmitting}>
+        <FieldGroup>
           {/* Header */}
           <div className="flex flex-col items-center gap-1 text-center">
             <h1 className="text-2xl font-bold">Login to your account</h1>
@@ -88,7 +88,7 @@ export function LoginForm() {
           <Controller
             name="email"
             control={form.control}
-            render={({field, fieldState}) => (
+            render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Email</FieldLabel>
 
@@ -110,7 +110,7 @@ export function LoginForm() {
           <Controller
             name="password"
             control={form.control}
-            render={({field, fieldState}) => (
+            render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <div className="flex items-center">
                   <FieldLabel htmlFor={field.name}>Password</FieldLabel>
