@@ -7,8 +7,11 @@ import {
   IconNotification,
   IconUserCircle,
 } from "@tabler/icons-react";
+import { authClient } from "@/shared/lib/auth/auth-client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-import {Avatar, AvatarFallback, AvatarImage} from "@/shared/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
-import {SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar} from "@/shared/ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/shared/ui/sidebar";
 
 export function NavUser({
   user,
@@ -29,7 +32,8 @@ export function NavUser({
     avatar: string;
   };
 }) {
-  const {isMobile} = useSidebar();
+  const { isMobile } = useSidebar();
+  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -83,7 +87,17 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                await authClient.signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      router.push("/login");
+                      toast.success("You have been logged out");
+                    },
+                  },
+                });
+              }}>
               <IconLogout />
               Log out
             </DropdownMenuItem>

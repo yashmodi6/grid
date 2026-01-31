@@ -1,4 +1,4 @@
-import {Home, CheckSquare, Calendar, Timer, HelpCircle, Settings} from "lucide-react";
+import { Home, CheckSquare, Calendar, Timer, HelpCircle, Settings } from "lucide-react";
 
 import {
   Sidebar,
@@ -13,22 +13,24 @@ import {
   SidebarMenuItem,
 } from "@/shared/ui/sidebar";
 
-import {Branding} from "./nav-branding";
-import {NavUser} from "./nav-user";
+import { type UserDto } from "@/entities/user/model/dtos";
+
+import { Branding } from "./nav-branding";
+import { NavUser } from "./nav-user";
 
 const mainItems = [
-  {title: "Home", icon: Home, url: "/"},
-  {title: "Todo", icon: CheckSquare, url: "/todo"},
-  {title: "Calendar", icon: Calendar, url: "/calendar"},
-  {title: "Timer", icon: Timer, url: "/timer"},
+  { title: "Home", icon: Home, url: "/" },
+  { title: "Todo", icon: CheckSquare, url: "/todo" },
+  { title: "Calendar", icon: Calendar, url: "/calendar" },
+  { title: "Timer", icon: Timer, url: "/timer" },
 ];
 
 const bottomItems = [
-  {title: "Help & Support", icon: HelpCircle, url: "/help"},
-  {title: "Settings", icon: Settings, url: "/settings"},
+  { title: "Help & Support", icon: HelpCircle, url: "/help" },
+  { title: "Settings", icon: Settings, url: "/settings" },
 ];
 
-export function AppSidebar() {
+export function AppSidebar({ user }: { user: UserDto }) {
   return (
     <Sidebar collapsible="icon">
       {/* BRAND */}
@@ -79,9 +81,9 @@ export function AppSidebar() {
       <SidebarFooter>
         <NavUser
           user={{
-            name: "Yash Modi",
-            email: "yash@example.com",
-            avatar: "/avatar.png",
+            name: user.name || "User",
+            email: user.email,
+            avatar: user.image || "",
           }}
         />
       </SidebarFooter>

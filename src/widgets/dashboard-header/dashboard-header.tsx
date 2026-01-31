@@ -1,12 +1,14 @@
 "use client";
 
-import {SidebarTrigger} from "@/shared/ui/sidebar";
-import {Separator} from "@/shared/ui/separator";
-import {Button} from "@/shared/ui/button";
-import {Avatar, AvatarFallback, AvatarImage} from "@/shared/ui/avatar";
-import {Trophy, Plus, Bell} from "lucide-react";
+import { SidebarTrigger } from "@/shared/ui/sidebar";
+import { Separator } from "@/shared/ui/separator";
+import { Button } from "@/shared/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { Trophy, Plus, Bell } from "lucide-react";
 
-export function DashboardHeader() {
+import type { UserDto } from "@/entities/user/model/dtos";
+
+export function DashboardHeader({ user }: { user: UserDto }) {
   return (
     <header className="flex h-16 items-center justify-between border-b px-4">
       {/* LEFT */}
@@ -35,8 +37,8 @@ export function DashboardHeader() {
         </div>
 
         <Avatar className="ml-2 h-8 w-8">
-          <AvatarImage src="/avatar.png" />
-          <AvatarFallback className="text-[14px] tracking-tight">Y</AvatarFallback>
+          <AvatarImage src={user.image || ""} />
+          <AvatarFallback className="text-[14px] tracking-tight">{user.name?.[0]?.toUpperCase() || "U"}</AvatarFallback>
         </Avatar>
       </div>
     </header>

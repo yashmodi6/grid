@@ -1,6 +1,7 @@
 import { auth } from "@/shared/lib/auth/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { UserRepository, type UserDto } from "@/entities/user";
 
 /**
  * User MUST be logged in.
@@ -32,4 +33,17 @@ export const requireUnAuth = async () => {
   }
 
   return null;
+};
+
+
+
+export const requireUser = async (): Promise<UserDto> => {
+  const session = await requireAuth();
+  const user = await UserRepository.getUserById(session.user.id);
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  return user;
 };
