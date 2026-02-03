@@ -1,13 +1,26 @@
-import { Home, CheckSquare, Calendar, Timer, HelpCircle, Settings } from "lucide-react";
+"use client";
+
+import {
+  BookOpen,
+  Calendar,
+  CheckSquare,
+  GraduationCap,
+  HelpCircle,
+  Home,
+  Library,
+  Settings,
+  Timer
+} from "lucide-react";
+import Link from "next/link";
 
 import {
   Sidebar,
-  SidebarHeader,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -18,11 +31,17 @@ import { type UserDto } from "@/entities/user/model/dtos";
 import { Branding } from "./nav-branding";
 import { NavUser } from "./nav-user";
 
-const mainItems = [
-  { title: "Home", icon: Home, url: "/" },
+const workspaceItems = [
+  { title: "Home", icon: Home, url: "/dashboard" },
   { title: "Todo", icon: CheckSquare, url: "/todo" },
   { title: "Calendar", icon: Calendar, url: "/calendar" },
   { title: "Timer", icon: Timer, url: "/timer" },
+];
+
+const universityItems = [
+  { title: "Subjects", icon: BookOpen, url: "/subjects" },
+  { title: "Grades", icon: GraduationCap, url: "/grades" },
+  { title: "Library", icon: Library, url: "/resources" },
 ];
 
 const bottomItems = [
@@ -39,18 +58,37 @@ export function AppSidebar({ user }: { user: UserDto }) {
       </SidebarHeader>
 
       <SidebarContent>
-        {/* TOP LIST */}
+        {/* WORKSPACE */}
         <SidebarGroup>
-          <SidebarGroupLabel>Productivity</SidebarGroupLabel>
+          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {mainItems.map((item) => (
+              {workspaceItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* UNIVERSITY */}
+        <SidebarGroup>
+          <SidebarGroupLabel>University</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {universityItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -65,10 +103,10 @@ export function AppSidebar({ user }: { user: UserDto }) {
               {bottomItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild className="text-xs">
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
