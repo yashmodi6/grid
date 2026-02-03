@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
-    "build": "next build --webpack",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
@@ -13,7 +13,7 @@
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
     "db:push": "drizzle-kit push",
-    "postinstall" : "node scripts/install-os-deps.js"
+    "postinstall": "node scripts/install-os-deps.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
