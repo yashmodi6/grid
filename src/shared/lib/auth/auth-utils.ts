@@ -1,22 +1,21 @@
-import { auth } from "@/shared/lib/auth/auth";
-import { headers } from "next/headers";
+import { getCurrentUser } from "@/shared/lib/auth/get-current-user";
 import { redirect } from "next/navigation";
+
 import { UserRepository, type UserDto } from "@/entities/user";
+import { dalVerifySuccess } from "@/shared/lib/dal";
 
 /**
  * User MUST be logged in.
  * Redirects to /login if not authenticated.
  */
 export const requireAuth = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const user = await getCurrentUser();
 
-  if (!session) {
+  if (!user) {
     redirect("/login");
   }
 
-  return session;
+  return { user }; // Return shape compatible with session.user access
 };
 
 /**
@@ -24,11 +23,9 @@ export const requireAuth = async () => {
  * Redirects to /dashboard if authenticated.
  */
 export const requireUnAuth = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const user = await getCurrentUser();
 
-  if (session) {
+  if (user) {
     redirect("/dashboard");
   }
 
@@ -38,8 +35,9 @@ export const requireUnAuth = async () => {
 
 
 export const requireUser = async (): Promise<UserDto> => {
-  const session = await requireAuth();
-  const user = await UserRepository.getUserById(session.user.id);
+  const { user: sessionUser } = await requireAuth();
+  const userResult = await UserRepository.getUserById(sessionUser.id);
+  const user = dalVerifySuccess(userResult);
 
   if (!user) {
     redirect("/login");
